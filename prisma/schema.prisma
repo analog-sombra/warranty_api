@@ -1,0 +1,282 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Role {
+  SYSTEM
+  ADMIN
+  MANUF_ADMIN
+  MANUF_ACCOUNTS
+  MANUF_MANAGER
+  MANUF_SALES
+  MANUF_TECHNICAL
+  DEALER_ADMIN
+  DEALER_ACCOUNTS
+  DEALER_MANAGER
+  DEALER_SALES
+  USER
+  ACCOUNTS
+  SALES
+  TECHNICAL
+}
+
+model city {
+  id     Int    @id @default(autoincrement())
+  name   String
+  status Status @default(ACTIVE)
+  zone   zone[]
+}
+
+model zone {
+  id      Int       @id @default(autoincrement())
+  name    String
+  status  Status    @default(ACTIVE)
+  city    city      @relation(fields: [city_id], references: [id])
+  city_id Int
+  user    user[]
+  company company[]
+  dealer  dealer[]
+}
+
+model product_category {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  pic                 String?
+  status              Status                @default(ACTIVE)
+  priority            Int                   @db.SmallInt
+  createdAt           DateTime              @default(now())
+  createdBy           user                  @relation("product_category_createdby", fields: [createdById], references: [id])
+  createdById         Int
+  updatedAt           DateTime              @updatedAt
+  updatedBy           user?                 @relation("product_category_updatedby", fields: [updatedById], references: [id])
+  updatedById         Int?
+  deletedAt           DateTime?
+  deletedBy           user?                 @relation("product_category_deletedby", fields: [deletedById], references: [id])
+  deletedById         Int?
+  product_subcategory product_subcategory[]
+}
+
+model product_subcategory {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  pic                 String?
+  status              Status                @default(ACTIVE)
+  priority            Int                   @db.SmallInt
+  product_category    product_category      @relation(fields: [product_category_id], references: [id])
+  product_category_id Int
+  createdAt           DateTime              @default(now())
+  createdBy           user                  @relation("product_subcategory_createdby", fields: [createdById], references: [id])
+  createdById         Int
+  updatedAt           DateTime              @updatedAt
+  updatedBy           user?                 @relation("product_subcategory_updatedby", fields: [updatedById], references: [id])
+  updatedById         Int?
+  deletedAt           DateTime?
+  deletedBy           user?                 @relation("product_subcategory_deletedby", fields: [deletedById], references: [id])
+  deletedById         Int?
+  product             product[]
+  company_subcategory company_subcategory[]
+}
+
+model user {
+  id              Int       @id @default(autoincrement())
+  name            String
+  contact1        String    @unique
+  contact2        String?
+  address         String?   @db.LongText
+  zone            zone      @relation(fields: [zone_id], references: [id])
+  zone_id         Int
+  is_dealer       Boolean
+  is_manufacturer Boolean
+  role            Role      @default(USER)
+  email           String    @unique
+  password        String
+  otp             String?
+  dob             DateTime?
+  profile         String?
+  status          Status    @default(ACTIVE)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  product_category_createdby product_category[] @relation("product_category_createdby")
+  product_category_updatedby product_category[] @relation("product_category_updatedby")
+  product_category_deletedby product_category[] @relation("product_category_deletedby")
+
+  product_subcategory_createdby product_subcategory[] @relation("product_subcategory_createdby")
+  product_subcategory_updatedby product_subcategory[] @relation("product_subcategory_updatedby")
+  product_subcategory_deletedby product_subcategory[] @relation("product_subcategory_deletedby")
+
+  company_createdby company[] @relation("company_createdby")
+  company_updatedby company[] @relation("company_updatedby")
+  company_deletedby company[] @relation("company_deletedby")
+
+  dealer_createdby dealer[] @relation("dealer_createdby")
+  dealer_updatedby dealer[] @relation("dealer_updatedby")
+  dealer_deletedby dealer[] @relation("dealer_deletedby")
+
+  product_createdby product[] @relation("product_createdby")
+  product_updatedby product[] @relation("product_updatedby")
+  product_deletedby product[] @relation("product_deletedby")
+
+  sales_createdby sales[] @relation("sales_createdby")
+  sales_updatedby sales[] @relation("sales_updatedby")
+  sales           sales[]
+
+  company_subcategory_createdby company_subcategory[] @relation("company_subcategory_createdby")
+  company_subcategory_updatedby company_subcategory[] @relation("company_subcategory_updatedby")
+  company_subcategory_deletedby company_subcategory[] @relation("company_subcategory_deletedby")
+
+  user_company_createdby user_company[] @relation("user_company_createdby")
+  user_company_updatedby user_company[] @relation("user_company_updatedby")
+  user_company_deletedby user_company[] @relation("user_company_deletedby")
+
+  user_company user_company[]
+}
+
+model company {
+  id                    Int                   @id @default(autoincrement())
+  name                  String
+  logo                  String
+  contact1              String
+  contact2              String?
+  address               String?               @db.LongText
+  zone                  zone                  @relation(fields: [zone_id], references: [id])
+  zone_id               Int
+  email                 String
+  pan                   String?
+  gst                   String?
+  website               String?
+  contact_person        String
+  contact_person_number String
+  designation           String
+  status                Status                @default(ACTIVE)
+  createdAt             DateTime              @default(now())
+  createdBy             user                  @relation("company_createdby", fields: [createdById], references: [id])
+  createdById           Int
+  updatedAt             DateTime              @updatedAt
+  updatedBy             user?                 @relation("company_updatedby", fields: [updatedById], references: [id])
+  updatedById           Int?
+  deletedAt             DateTime?
+  deletedBy             user?                 @relation("company_deletedby", fields: [deletedById], references: [id])
+  deletedById           Int?
+  company_subcategory   company_subcategory[]
+  user_company          user_company[]
+}
+
+model dealer {
+  id                    Int       @id @default(autoincrement())
+  name                  String
+  contact1              String
+  contact2              String?
+  address               String?   @db.LongText
+  zone                  zone      @relation(fields: [zone_id], references: [id])
+  zone_id               Int
+  email                 String
+  pan                   String?
+  gst                   String?
+  contact_person        String
+  contact_person_number String
+  designation           String
+  status                Status    @default(ACTIVE)
+  createdAt             DateTime  @default(now())
+  createdBy             user      @relation("dealer_createdby", fields: [createdById], references: [id])
+  createdById           Int
+  updatedAt             DateTime  @updatedAt
+  updatedBy             user?     @relation("dealer_updatedby", fields: [updatedById], references: [id])
+  updatedById           Int?
+  deletedAt             DateTime?
+  deletedBy             user?     @relation("dealer_deletedby", fields: [deletedById], references: [id])
+  deletedById           Int?
+  sales                 sales[]
+}
+
+model product {
+  id             Int                 @id @default(autoincrement())
+  name           String
+  subcategory    product_subcategory @relation(fields: [subcategory_id], references: [id])
+  subcategory_id Int
+  warranty_time  DateTime
+  description    String?             @db.LongText
+  price          Float
+  createdAt      DateTime            @default(now())
+  createdBy      user                @relation("product_createdby", fields: [createdById], references: [id])
+  createdById    Int
+  updatedAt      DateTime            @updatedAt
+  updatedBy      user?               @relation("product_updatedby", fields: [updatedById], references: [id])
+  updatedById    Int?
+  deletedAt      DateTime?
+  deletedBy      user?               @relation("product_deletedby", fields: [deletedById], references: [id])
+  deletedById    Int?
+  sales          sales[]
+}
+
+model sales {
+  id            Int      @id @default(autoincrement())
+  product       product  @relation(fields: [product_id], references: [id])
+  product_id    Int
+  dealer        dealer   @relation(fields: [dealer_id], references: [id])
+  dealer_id     Int
+  customer      user     @relation(fields: [customer_id], references: [id])
+  customer_id   Int
+  warranty_till DateTime
+  sale_date     DateTime @default(now())
+  createdAt     DateTime @default(now())
+  createdBy     user     @relation("sales_createdby", fields: [createdById], references: [id])
+  createdById   Int
+  updatedAt     DateTime @updatedAt
+  updatedBy     user?    @relation("sales_updatedby", fields: [updatedById], references: [id])
+  updatedById   Int?
+}
+
+model company_subcategory {
+  id             Int                 @id @default(autoincrement())
+  company        company             @relation(fields: [company_id], references: [id])
+  company_id     Int
+  subcategory    product_subcategory @relation(fields: [subcategory_id], references: [id])
+  subcategory_id Int
+  pricing        String
+  status         Status              @default(ACTIVE)
+  createdAt      DateTime            @default(now())
+  createdBy      user                @relation("company_subcategory_createdby", fields: [createdById], references: [id])
+  createdById    Int
+  updatedAt      DateTime            @updatedAt
+  updatedBy      user?               @relation("company_subcategory_updatedby", fields: [updatedById], references: [id])
+  updatedById    Int?
+  deletedAt      DateTime?
+  deletedBy      user?               @relation("company_subcategory_deletedby", fields: [deletedById], references: [id])
+  deletedById    Int?
+}
+
+model user_company {
+  id          Int       @id @default(autoincrement())
+  user        user      @relation(fields: [user_id], references: [id])
+  user_id     Int
+  company     company   @relation(fields: [company_id], references: [id])
+  company_id  Int
+  status      Status    @default(ACTIVE)
+  createdAt   DateTime  @default(now())
+  createdBy   user      @relation("user_company_createdby", fields: [createdById], references: [id])
+  createdById Int
+  updatedAt   DateTime  @updatedAt
+  updatedBy   user?     @relation("user_company_updatedby", fields: [updatedById], references: [id])
+  updatedById Int?
+  deletedAt   DateTime?
+  deletedBy   user?     @relation("user_company_deletedby", fields: [deletedById], references: [id])
+  deletedById Int?
+}
