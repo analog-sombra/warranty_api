@@ -1,0 +1,147 @@
+import {
+  IsDate,
+  IsEnum,
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { CreateCompanyInput } from './create-company.input';
+import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { Status } from '@prisma/client';
+
+@InputType()
+export class UpdateCompanyInput extends PartialType(CreateCompanyInput) {
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  logo: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  contact1: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  contact2: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  address: string;
+
+  @IsOptional()
+  @IsNumber()
+  @Field(() => Int, {
+    nullable: true,
+  })
+  zone_id: number;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  email: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  pan: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  gst: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  website: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  contact_person: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  contact_number: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  contact_person_number: string;
+
+  @IsOptional()
+  @IsString()
+  @Field(() => String, {
+    nullable: true,
+  })
+  designation: string;
+
+  @IsOptional()
+  @IsEnum(Status)
+  @Field(() => Status, {
+    nullable: true,
+  })
+  status: Status;
+
+  @IsOptional()
+  @IsDate()
+  @Field(() => Date, {
+    nullable: true,
+  })
+  updatedAt: Date;
+
+  @IsOptional()
+  @IsInt()
+  @Field(() => Int, {
+    nullable: true,
+  })
+  updatedById: number;
+
+  @IsOptional()
+  @IsDate()
+  @Field(() => Date, {
+    nullable: true,
+  })
+  deletedAt: Date;
+
+  @IsOptional()
+  @IsInt()
+  @Field(() => Int, {
+    nullable: true,
+  })
+  deletedById: number;
+}

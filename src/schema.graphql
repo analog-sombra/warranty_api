@@ -2,28 +2,435 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Auth {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type City {
+  id: Int!
+  name: String!
+  status: Status!
 }
 
-input CreateAuthInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type CityPagination {
+  data: [City!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type Company {
+  address: String
+  contact1: String!
+  contact2: String
+  contact_person: String!
+  contact_person_number: String!
+  createdAt: DateTime!
+  deletedAt: DateTime
+  designation: String
+  email: String!
+  gst: String
+  id: Int!
+  logo: String!
+  name: String!
+  pan: String
+  status: Status!
+  updatedAt: DateTime!
+  website: String
+  zone: Zone!
+  zone_id: Int!
+}
+
+type CompanyPagination {
+  data: [Company!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+input CreateCityInput {
+  name: String!
+}
+
+input CreateCompanyInput {
+  address: String
+  contact1: String!
+  contact2: String
+  contact_person: String!
+  contact_person_number: String!
+  createdById: Int!
+  designation: String!
+  email: String!
+  gst: String
+  logo: String!
+  name: String!
+  pan: String
+  status: Status
+  website: String
+  zone_id: Int!
+}
+
+input CreateProductCategoryInput {
+  createdById: Int!
+  name: String!
+  pic: String
+  priority: Int!
+  status: Status
+}
+
+input CreateProductInput {
+  createdById: Int!
+  description: String
+  image: String
+  name: String!
+  price: Float!
+  status: Status
+  subcategory_id: Int!
+  warranty_time: Int!
+}
+
+input CreateProductSubcategoryInput {
+  createdById: Int!
+  name: String!
+  pic: String
+  priority: Int!
+  product_category_id: Int!
+  status: Status
+}
+
+input CreateUserInput {
+  address: String
+  contact1: String!
+  contact2: String
+  dob: DateTime
+  email: String
+  is_dealer: Boolean!
+  is_manufacturer: Boolean!
+  name: String!
+  otp: String
+  password: String
+  profile: String
+  role: Role
+  status: Status
+  zone_id: Int!
+}
+
+input CreateZoneInput {
+  city_id: Int!
+  name: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LoginUserInput {
+  contact: String!
+  password: String!
 }
 
 type Mutation {
-  createAuth(createAuthInput: CreateAuthInput!): Auth!
-  removeAuth(id: Int!): Auth!
-  updateAuth(updateAuthInput: UpdateAuthInput!): Auth!
+  createCity(inputType: CreateCityInput!): City!
+  createCompany(inputType: CreateCompanyInput!): Company!
+  createProduct(inputType: CreateProductInput!): Product!
+  createProductCategory(inputType: CreateProductCategoryInput!): ProductCategory!
+  createProductSubcategory(inputType: CreateProductSubcategoryInput!): ProductSubcategory!
+  createUser(inputType: CreateUserInput!): User!
+  createZone(inputType: CreateZoneInput!): Zone!
+  deleteCity(id: Int!, userid: Int!): City!
+  deleteCompany(id: Int!, userid: Int!): Company!
+  deleteProduct(id: Int!, userid: Int!): Product!
+  deleteProductCategory(id: Int!, userid: Int!): ProductCategory!
+  deleteProductSubcategory(id: Int!, userid: Int!): ProductSubcategory!
+  deleteUser(id: Int!, userid: Int!): User!
+  deleteZone(id: Int!, userid: Int!): Zone!
+  optLogin(contact: String!): User!
+  signup(signUpUserInput: SignUpUserInput!): User!
+  updateCity(id: Int!, updateType: UpdateCityInput!): City!
+  updateCompany(id: Int!, updateType: UpdateCompanyInput!): Company!
+  updateProduct(id: Int!, updateType: UpdateProductInput!): Product!
+  updateProductCategory(id: Int!, updateType: UpdateProductCategoryInput!): ProductCategory!
+  updateProductSubcategory(id: Int!, updateType: UpdateProductSubcategoryInput!): ProductSubcategory!
+  updateUser(id: Int!, updateType: UpdateUserInput!): User!
+  updateZone(id: Int!, updateType: UpdateZoneInput!): Zone!
+  verifyOtp(contact: String!, otp: String!): User!
+}
+
+type Product {
+  company: Company!
+  company_id: Int!
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  description: String
+  id: Int!
+  image: String
+  name: String!
+  price: Float!
+  subcategory: ProductSubcategory!
+  subcategory_id: Int!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  warranty_time: Int!
+}
+
+type ProductCategory {
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  name: String!
+  pic: String
+  priority: Int!
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type ProductCategoryPagination {
+  data: [ProductCategory!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type ProductPagination {
+  data: [Product!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type ProductSubcategory {
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  name: String!
+  pic: String
+  priority: Int!
+  product_category: ProductCategory!
+  product_category_id: Int!
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type ProductSubcategoryPagination {
+  data: [ProductSubcategory!]!
+  skip: Int!
+  take: Int!
+  total: Int!
 }
 
 type Query {
-  auth(id: Int!): Auth!
+  getAllCity: [City!]!
+  getAllCompany: [Company!]!
+  getAllProduct: [Product!]!
+  getAllProductCategory: [ProductCategory!]!
+  getAllProductSubcategory: [ProductSubcategory!]!
+  getAllUser: [User!]!
+  getAllZone: [Zone!]!
+  getCityById(id: Int!): City!
+  getCompanyById(id: Int!): Company!
+  getPaginatedCity(searchPaginationInput: SearchPaginationInput!): CityPagination!
+  getPaginatedCompany(searchPaginationInput: SearchPaginationInput!): CompanyPagination!
+  getPaginatedProduct(searchPaginationInput: SearchPaginationInput!): ProductPagination!
+  getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput!): ProductCategoryPagination!
+  getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput!): ProductSubcategoryPagination!
+  getPaginatedUser(searchPaginationInput: SearchPaginationInput!): UserPagination!
+  getPaginatedZone(searchPaginationInput: SearchPaginationInput!): ZonePagination!
+  getProductById(id: Int!): Product!
+  getProductCategoryById(id: Int!): ProductCategory!
+  getProductSubcategoryById(id: Int!): ProductSubcategory!
+  getUserById(id: Int!): User!
+  getZoneById(id: Int!): Zone!
+  login(loginUserInput: LoginUserInput!): User!
 }
 
-input UpdateAuthInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+enum Role {
+  ACCOUNTS
+  ADMIN
+  DEALER_ACCOUNTS
+  DEALER_ADMIN
+  DEALER_MANAGER
+  DEALER_SALES
+  MANUF_ACCOUNTS
+  MANUF_ADMIN
+  MANUF_MANAGER
+  MANUF_SALES
+  MANUF_TECHNICAL
+  SALES
+  SYSTEM
+  TECHNICAL
+  USER
+}
+
+input SearchPaginationInput {
+  search: String
+  skip: Int!
+  take: Int!
+}
+
+input SignUpUserInput {
+  mobile: String!
+  name: String!
+  password: String!
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+input UpdateCityInput {
+  name: String
+  status: Status
+}
+
+input UpdateCompanyInput {
+  address: String
+  contact1: String
+  contact2: String
+  contact_number: String
+  contact_person: String
+  contact_person_number: String
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  designation: String
+  email: String
+  gst: String
+  logo: String
+  name: String
+  pan: String
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+  website: String
+  zone_id: Int
+}
+
+input UpdateProductCategoryInput {
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  name: String
+  pic: String
+  priority: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+}
+
+input UpdateProductInput {
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  description: String
+  image: String
+  name: String
+  price: Float
+  status: Status
+  subcategory_id: Int
+  updatedAt: DateTime
+  updatedById: Int
+  warranty_time: Int
+}
+
+input UpdateProductSubcategoryInput {
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  name: String
+  pic: String
+  priority: Int
+  product_category_id: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+}
+
+input UpdateUserInput {
+  address: String
+  contact1: String
+  contact2: String
+  deletedAt: DateTime
+  dob: DateTime
+  email: String
+  is_dealer: Boolean
+  is_manufacturer: Boolean
+  name: String
+  otp: String
+  password: String
+  profile: String
+  role: Role
+  status: Status
+  updatedAt: DateTime
+  zone_id: Int
+}
+
+input UpdateZoneInput {
+  city_id: Int
+  name: String
+  status: Status
+}
+
+type User {
+  address: String
+  contact1: String!
+  contact2: String
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  dob: DateTime
+  email: String!
   id: Int!
+  is_dealer: Boolean!
+  is_manufacturer: Boolean!
+  name: String!
+  otp: String
+  password: String!
+  profile: String
+  role: Role!
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  zone: Zone!
+  zone_id: Int!
+}
+
+type UserPagination {
+  data: [User!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type Zone {
+  city: City!
+  city_id: Int!
+  id: Int!
+  name: String!
+  status: Status!
+}
+
+type ZonePagination {
+  data: [Zone!]!
+  skip: Int!
+  take: Int!
+  total: Int!
 }

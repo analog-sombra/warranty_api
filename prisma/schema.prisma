@@ -104,8 +104,8 @@ model user {
   is_dealer       Boolean
   is_manufacturer Boolean
   role            Role      @default(USER)
-  email           String    @unique
-  password        String
+  email           String?   @unique
+  password        String?
   otp             String?
   dob             DateTime?
   profile         String?
@@ -177,6 +177,7 @@ model company {
   deletedById           Int?
   company_subcategory   company_subcategory[]
   user_company          user_company[]
+  product               product[]
 }
 
 model dealer {
@@ -209,11 +210,15 @@ model dealer {
 model product {
   id             Int                 @id @default(autoincrement())
   name           String
+  image          String?
   subcategory    product_subcategory @relation(fields: [subcategory_id], references: [id])
   subcategory_id Int
-  warranty_time  DateTime
+  warranty_time  Int
+  company        company             @relation(fields: [company_id], references: [id])
+  company_id     Int
   description    String?             @db.LongText
   price          Float
+  status         Status              @default(ACTIVE)
   createdAt      DateTime            @default(now())
   createdBy      user                @relation("product_createdby", fields: [createdById], references: [id])
   createdById    Int

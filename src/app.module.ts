@@ -9,6 +9,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from 'prisma/prisma.module';
 import { UserModule } from './user/user.module';
+import { CityModule } from './city/city.module';
+import { ZoneModule } from './zone/zone.module';
+import { ProductCategoryModule } from './product_category/product_category.module';
+import { ProductSubcategoryModule } from './product_subcategory/product_subcategory.module';
+import { CompanyModule } from './company/company.module';
+import { UploaderModule } from './uploader/uploader.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -30,6 +37,14 @@ import { UserModule } from './user/user.module';
     PrismaModule,
     AuthModule,
     UserModule,
+    CityModule,
+    ZoneModule,
+    ProductCategoryModule,
+    ProductSubcategoryModule,
+    CompanyModule,
+    UploaderModule,
+    ProductModule,
+    // BaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
