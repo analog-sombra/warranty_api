@@ -5,6 +5,7 @@ import { createBaseResolver } from 'src/base/base.resolver';
 import { Prisma, zone as ZoneModel } from '@prisma/client';
 import { CreateZoneInput } from './dto/create-zone.input';
 import { UpdateZoneInput } from './dto/update-zone.input';
+import { WhereZoneSearchInput } from './dto/search-zone.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 
 @ObjectType()
@@ -15,6 +16,7 @@ const BaseZoneResolver = createBaseResolver<
   ZoneModel,
   typeof CreateZoneInput,
   typeof UpdateZoneInput,
+  typeof WhereZoneSearchInput,
   typeof ZonePagination,
   Prisma.zoneDelegate<any>
 >(
@@ -22,6 +24,7 @@ const BaseZoneResolver = createBaseResolver<
   'Zone',
   () => CreateZoneInput,
   () => UpdateZoneInput,
+  () => WhereZoneSearchInput,
   () => ZonePagination,
 );
 

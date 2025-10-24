@@ -22,6 +22,11 @@ export class CreateProductInput {
   @IsNotEmpty()
   @IsInt()
   @Field(() => Int)
+  company_id: number;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Field(() => Int)
   warranty_time: number;
 
   @IsOptional()

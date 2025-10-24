@@ -3,6 +3,7 @@ import { ProductSubcategoryService } from './product_subcategory.service';
 import { ProductSubcategory } from './entities/product_subcategory.entity';
 import { CreateProductSubcategoryInput } from './dto/create-product_subcategory.input';
 import { UpdateProductSubcategoryInput } from './dto/update-product_subcategory.input';
+import { WhereProductSubcategorySearchInput } from './dto/search-product_subcategory.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 import { createBaseResolver } from 'src/base/base.resolver';
 import {
@@ -20,6 +21,7 @@ const BaseProductSubcategoryResolver = createBaseResolver<
   ProductSubcategoryModel,
   typeof CreateProductSubcategoryInput,
   typeof UpdateProductSubcategoryInput,
+  typeof WhereProductSubcategorySearchInput,
   typeof ProductSubcategoryPagination,
   Prisma.product_subcategoryDelegate<any>
 >(
@@ -27,6 +29,7 @@ const BaseProductSubcategoryResolver = createBaseResolver<
   'ProductSubcategory',
   () => CreateProductSubcategoryInput,
   () => UpdateProductSubcategoryInput,
+  () => WhereProductSubcategorySearchInput,
   () => ProductSubcategoryPagination,
 );
 

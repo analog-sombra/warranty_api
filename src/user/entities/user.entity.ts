@@ -37,10 +37,10 @@ export class User {
   @Field(() => Role)
   role: Role;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   email: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   password: string;
 
   @Field(() => String, { nullable: true })

@@ -6,16 +6,18 @@ import { createBaseResolver } from 'src/base/base.resolver';
 import { Prisma, city as CityModel } from '@prisma/client';
 import { CreateCityInput } from './dto/create-city.input';
 import { UpdateCityInput } from './dto/update-city.input';
+import { WhereCitySearchInput } from './dto/search-city.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 
 @ObjectType()
-export class CityPagination extends BasePaginated(City) {}
+export class CityPagination extends BasePaginated(City) { }
 
 const BaseCityResolver = createBaseResolver<
   typeof City,
   CityModel,
   typeof CreateCityInput,
   typeof UpdateCityInput,
+  typeof WhereCitySearchInput,
   typeof CityPagination,
   Prisma.cityDelegate<any>
 >(
@@ -23,6 +25,7 @@ const BaseCityResolver = createBaseResolver<
   'City',
   () => CreateCityInput,
   () => UpdateCityInput,
+  () => WhereCitySearchInput,
   () => CityPagination,
 );
 

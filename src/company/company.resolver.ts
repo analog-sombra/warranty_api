@@ -3,6 +3,7 @@ import { CompanyService } from './company.service';
 import { Company } from './entities/company.entity';
 import { CreateCompanyInput } from './dto/create-company.input';
 import { UpdateCompanyInput } from './dto/update-company.input';
+import { WhereCompanySearchInput } from './dto/search-company.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 import { createBaseResolver } from 'src/base/base.resolver';
 import { Prisma, company as CompanyModel } from '@prisma/client';
@@ -14,6 +15,7 @@ const BaseCompanyResolver = createBaseResolver<
   CompanyModel,
   typeof CreateCompanyInput,
   typeof UpdateCompanyInput,
+  typeof WhereCompanySearchInput,
   typeof CompanyPagination,
   Prisma.companyDelegate<any>
 >(
@@ -21,6 +23,7 @@ const BaseCompanyResolver = createBaseResolver<
   'Company',
   () => CreateCompanyInput,
   () => UpdateCompanyInput,
+  () => WhereCompanySearchInput,
   () => CompanyPagination,
 );
 

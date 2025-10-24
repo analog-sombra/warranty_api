@@ -62,6 +62,7 @@ export interface CreateProductCategoryInput {
 }
 
 export interface CreateProductInput {
+    company_id: number;
     createdById: number;
     description?: Nullable<string>;
     image?: Nullable<string>;
@@ -79,6 +80,12 @@ export interface CreateProductSubcategoryInput {
     priority: number;
     product_category_id: number;
     status?: Nullable<Status>;
+}
+
+export interface CreateUserCompanyInput {
+    company_id: number;
+    status?: Nullable<Status>;
+    user_id: number;
 }
 
 export interface CreateUserInput {
@@ -161,6 +168,7 @@ export interface UpdateProductCategoryInput {
 }
 
 export interface UpdateProductInput {
+    company_id?: Nullable<number>;
     createdById?: Nullable<number>;
     deletedAt?: Nullable<DateTime>;
     deletedById?: Nullable<number>;
@@ -188,6 +196,16 @@ export interface UpdateProductSubcategoryInput {
     updatedById?: Nullable<number>;
 }
 
+export interface UpdateUserCompanyInput {
+    company_id: number;
+    deletedAt?: Nullable<DateTime>;
+    deletedById?: Nullable<number>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    user_id: number;
+}
+
 export interface UpdateUserInput {
     address?: Nullable<string>;
     contact1?: Nullable<string>;
@@ -209,6 +227,124 @@ export interface UpdateUserInput {
 
 export interface UpdateZoneInput {
     city_id?: Nullable<number>;
+    name?: Nullable<string>;
+    status?: Nullable<Status>;
+}
+
+export interface WhereCitySearchInput {
+    id?: Nullable<string>;
+    name?: Nullable<string>;
+    status?: Nullable<Status>;
+}
+
+export interface WhereCompanySearchInput {
+    address?: Nullable<string>;
+    contact1?: Nullable<string>;
+    contact2?: Nullable<string>;
+    contact_person?: Nullable<string>;
+    contact_person_number?: Nullable<string>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
+    deletedById?: Nullable<number>;
+    designation?: Nullable<string>;
+    email?: Nullable<string>;
+    gst?: Nullable<string>;
+    id?: Nullable<string>;
+    logo?: Nullable<string>;
+    name?: Nullable<string>;
+    pan?: Nullable<string>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    website?: Nullable<string>;
+    zone_id?: Nullable<number>;
+}
+
+export interface WhereProductCategorySearchInput {
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
+    deletedById?: Nullable<number>;
+    id?: Nullable<string>;
+    name?: Nullable<string>;
+    pic?: Nullable<string>;
+    priority?: Nullable<number>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+}
+
+export interface WhereProductSearchInput {
+    company_id?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
+    deletedById?: Nullable<number>;
+    description?: Nullable<string>;
+    id?: Nullable<string>;
+    image?: Nullable<string>;
+    name?: Nullable<string>;
+    price?: Nullable<number>;
+    status?: Nullable<Status>;
+    subcategory_id?: Nullable<number>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    warranty_time?: Nullable<number>;
+}
+
+export interface WhereProductSubcategorySearchInput {
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
+    deletedById?: Nullable<number>;
+    id?: Nullable<string>;
+    name?: Nullable<string>;
+    pic?: Nullable<string>;
+    priority?: Nullable<number>;
+    product_category_id?: Nullable<number>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+}
+
+export interface WhereUserCompanySearchInput {
+    company_id?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    deletedAt?: Nullable<DateTime>;
+    deletedById?: Nullable<number>;
+    id?: Nullable<string>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    user_id?: Nullable<number>;
+}
+
+export interface WhereUserSearchInput {
+    address?: Nullable<string>;
+    contact1?: Nullable<string>;
+    contact2?: Nullable<string>;
+    createdAt?: Nullable<DateTime>;
+    deletedAt?: Nullable<DateTime>;
+    dob?: Nullable<DateTime>;
+    email?: Nullable<string>;
+    id?: Nullable<string>;
+    is_dealer?: Nullable<boolean>;
+    is_manufacturer?: Nullable<boolean>;
+    name?: Nullable<string>;
+    otp?: Nullable<string>;
+    password?: Nullable<string>;
+    profile?: Nullable<string>;
+    role?: Nullable<Role>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    zone_id?: Nullable<number>;
+}
+
+export interface WhereZoneSearchInput {
+    city_id?: Nullable<number>;
+    id?: Nullable<string>;
     name?: Nullable<string>;
     status?: Nullable<Status>;
 }
@@ -262,6 +398,7 @@ export interface IMutation {
     createProductCategory(inputType: CreateProductCategoryInput): ProductCategory | Promise<ProductCategory>;
     createProductSubcategory(inputType: CreateProductSubcategoryInput): ProductSubcategory | Promise<ProductSubcategory>;
     createUser(inputType: CreateUserInput): User | Promise<User>;
+    createUserCompany(inputType: CreateUserCompanyInput): UserCompany | Promise<UserCompany>;
     createZone(inputType: CreateZoneInput): Zone | Promise<Zone>;
     deleteCity(id: number, userid: number): City | Promise<City>;
     deleteCompany(id: number, userid: number): Company | Promise<Company>;
@@ -269,6 +406,7 @@ export interface IMutation {
     deleteProductCategory(id: number, userid: number): ProductCategory | Promise<ProductCategory>;
     deleteProductSubcategory(id: number, userid: number): ProductSubcategory | Promise<ProductSubcategory>;
     deleteUser(id: number, userid: number): User | Promise<User>;
+    deleteUserCompany(id: number, userid: number): UserCompany | Promise<UserCompany>;
     deleteZone(id: number, userid: number): Zone | Promise<Zone>;
     optLogin(contact: string): User | Promise<User>;
     signup(signUpUserInput: SignUpUserInput): User | Promise<User>;
@@ -278,6 +416,7 @@ export interface IMutation {
     updateProductCategory(id: number, updateType: UpdateProductCategoryInput): ProductCategory | Promise<ProductCategory>;
     updateProductSubcategory(id: number, updateType: UpdateProductSubcategoryInput): ProductSubcategory | Promise<ProductSubcategory>;
     updateUser(id: number, updateType: UpdateUserInput): User | Promise<User>;
+    updateUserCompany(id: number, updateType: UpdateUserCompanyInput): UserCompany | Promise<UserCompany>;
     updateZone(id: number, updateType: UpdateZoneInput): Zone | Promise<Zone>;
     verifyOtp(contact: string, otp: string): User | Promise<User>;
 }
@@ -296,6 +435,7 @@ export interface Product {
     image?: Nullable<string>;
     name: string;
     price: number;
+    status: Status;
     subcategory: ProductSubcategory;
     subcategory_id: number;
     updatedAt: DateTime;
@@ -368,20 +508,23 @@ export interface IQuery {
     getAllProductCategory(): ProductCategory[] | Promise<ProductCategory[]>;
     getAllProductSubcategory(): ProductSubcategory[] | Promise<ProductSubcategory[]>;
     getAllUser(): User[] | Promise<User[]>;
+    getAllUserCompany(): UserCompany[] | Promise<UserCompany[]>;
     getAllZone(): Zone[] | Promise<Zone[]>;
     getCityById(id: number): City | Promise<City>;
     getCompanyById(id: number): Company | Promise<Company>;
-    getPaginatedCity(searchPaginationInput: SearchPaginationInput): CityPagination | Promise<CityPagination>;
-    getPaginatedCompany(searchPaginationInput: SearchPaginationInput): CompanyPagination | Promise<CompanyPagination>;
-    getPaginatedProduct(searchPaginationInput: SearchPaginationInput): ProductPagination | Promise<ProductPagination>;
-    getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput): ProductCategoryPagination | Promise<ProductCategoryPagination>;
-    getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput): ProductSubcategoryPagination | Promise<ProductSubcategoryPagination>;
-    getPaginatedUser(searchPaginationInput: SearchPaginationInput): UserPagination | Promise<UserPagination>;
-    getPaginatedZone(searchPaginationInput: SearchPaginationInput): ZonePagination | Promise<ZonePagination>;
+    getPaginatedCity(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCitySearchInput): CityPagination | Promise<CityPagination>;
+    getPaginatedCompany(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCompanySearchInput): CompanyPagination | Promise<CompanyPagination>;
+    getPaginatedProduct(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductSearchInput): ProductPagination | Promise<ProductPagination>;
+    getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductCategorySearchInput): ProductCategoryPagination | Promise<ProductCategoryPagination>;
+    getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductSubcategorySearchInput): ProductSubcategoryPagination | Promise<ProductSubcategoryPagination>;
+    getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
+    getPaginatedUserCompany(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserCompanySearchInput): UserCompanyPagination | Promise<UserCompanyPagination>;
+    getPaginatedZone(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereZoneSearchInput): ZonePagination | Promise<ZonePagination>;
     getProductById(id: number): Product | Promise<Product>;
     getProductCategoryById(id: number): ProductCategory | Promise<ProductCategory>;
     getProductSubcategoryById(id: number): ProductSubcategory | Promise<ProductSubcategory>;
     getUserById(id: number): User | Promise<User>;
+    getUserCompanyById(id: number): UserCompany | Promise<UserCompany>;
     getZoneById(id: number): Zone | Promise<Zone>;
     login(loginUserInput: LoginUserInput): User | Promise<User>;
 }
@@ -397,13 +540,13 @@ export interface User {
     deletedBy?: Nullable<User>;
     deletedById?: Nullable<number>;
     dob?: Nullable<DateTime>;
-    email: string;
+    email?: Nullable<string>;
     id: number;
     is_dealer: boolean;
     is_manufacturer: boolean;
     name: string;
     otp?: Nullable<string>;
-    password: string;
+    password?: Nullable<string>;
     profile?: Nullable<string>;
     role: Role;
     status: Status;
@@ -412,6 +555,31 @@ export interface User {
     updatedById?: Nullable<number>;
     zone: Zone;
     zone_id: number;
+}
+
+export interface UserCompany {
+    company: Company;
+    company_id: number;
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    deletedAt?: Nullable<DateTime>;
+    deletedBy?: Nullable<User>;
+    deletedById?: Nullable<number>;
+    id: number;
+    status: Status;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+    user: User;
+    user_id: number;
+}
+
+export interface UserCompanyPagination {
+    data: UserCompany[];
+    skip: number;
+    take: number;
+    total: number;
 }
 
 export interface UserPagination {

@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { WhereUserSearchInput } from './dto/search-user.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 import { createBaseResolver } from 'src/base/base.resolver';
 import { Prisma, user as UserModel } from '@prisma/client';
@@ -15,6 +16,7 @@ const BaseUserResolver = createBaseResolver<
   UserModel,
   typeof CreateUserInput,
   typeof UpdateUserInput,
+  typeof WhereUserSearchInput,
   typeof UserPagination,
   Prisma.userDelegate<any>
 >(
@@ -22,6 +24,7 @@ const BaseUserResolver = createBaseResolver<
   'User',
   () => CreateUserInput,
   () => UpdateUserInput,
+  () => WhereUserSearchInput,
   () => UserPagination,
 );
 

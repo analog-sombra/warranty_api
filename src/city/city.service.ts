@@ -5,6 +5,7 @@ import { city, Prisma } from '@prisma/client';
 import { DefaultArgs } from 'generated/prisma/runtime/library';
 import { CreateCityInput } from './dto/create-city.input';
 import { UpdateCityInput } from './dto/update-city.input';
+import { WhereCitySearchInput } from './dto/search-city.input';
 import { CityPagination } from './city.resolver';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class CityService extends BaseService<
   city,
   typeof CreateCityInput,
   typeof UpdateCityInput,
+  typeof WhereCitySearchInput,
   typeof CityPagination,
   Prisma.cityDelegate<DefaultArgs, Prisma.PrismaClientOptions>
 > {

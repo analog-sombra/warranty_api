@@ -3,6 +3,7 @@ import { ProductCategoryService } from './product_category.service';
 import { ProductCategory } from './entities/product_category.entity';
 import { CreateProductCategoryInput } from './dto/create-product_category.input';
 import { UpdateProductCategoryInput } from './dto/update-product_category.input';
+import { WhereProductCategorySearchInput } from './dto/search-product_category.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 import {
   Prisma,
@@ -11,13 +12,14 @@ import {
 import { createBaseResolver } from 'src/base/base.resolver';
 
 @ObjectType()
-export class ProductCategoryPagination extends BasePaginated(ProductCategory) {}
+export class ProductCategoryPagination extends BasePaginated(ProductCategory) { }
 
 const BaseProductCategoryResolver = createBaseResolver<
   typeof ProductCategory,
   ProductCategoryModel,
   typeof CreateProductCategoryInput,
   typeof UpdateProductCategoryInput,
+  typeof WhereProductCategorySearchInput,
   typeof ProductCategoryPagination,
   Prisma.product_categoryDelegate<any>
 >(
@@ -25,6 +27,7 @@ const BaseProductCategoryResolver = createBaseResolver<
   'ProductCategory',
   () => CreateProductCategoryInput,
   () => UpdateProductCategoryInput,
+  () => WhereProductCategorySearchInput,
   () => ProductCategoryPagination,
 );
 

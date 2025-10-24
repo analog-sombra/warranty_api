@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCompanyInput } from './dto/create-company.input';
 import { UpdateCompanyInput } from './dto/update-company.input';
+import { WhereCompanySearchInput } from './dto/search-company.input';
 import { BaseService } from 'src/base/base.service';
 import { CompanyPagination } from './company.resolver';
 import { DefaultArgs } from 'generated/prisma/runtime/library';
@@ -12,6 +13,7 @@ export class CompanyService extends BaseService<
   company,
   typeof CreateCompanyInput,
   typeof UpdateCompanyInput,
+  typeof WhereCompanySearchInput,
   typeof CompanyPagination,
   Prisma.companyDelegate<DefaultArgs, Prisma.PrismaClientOptions>
 > {

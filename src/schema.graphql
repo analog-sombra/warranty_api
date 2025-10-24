@@ -75,6 +75,7 @@ input CreateProductCategoryInput {
 }
 
 input CreateProductInput {
+  company_id: Int!
   createdById: Int!
   description: String
   image: String
@@ -92,6 +93,12 @@ input CreateProductSubcategoryInput {
   priority: Int!
   product_category_id: Int!
   status: Status
+}
+
+input CreateUserCompanyInput {
+  company_id: Int!
+  status: Status
+  user_id: Int!
 }
 
 input CreateUserInput {
@@ -133,6 +140,7 @@ type Mutation {
   createProductCategory(inputType: CreateProductCategoryInput!): ProductCategory!
   createProductSubcategory(inputType: CreateProductSubcategoryInput!): ProductSubcategory!
   createUser(inputType: CreateUserInput!): User!
+  createUserCompany(inputType: CreateUserCompanyInput!): UserCompany!
   createZone(inputType: CreateZoneInput!): Zone!
   deleteCity(id: Int!, userid: Int!): City!
   deleteCompany(id: Int!, userid: Int!): Company!
@@ -140,6 +148,7 @@ type Mutation {
   deleteProductCategory(id: Int!, userid: Int!): ProductCategory!
   deleteProductSubcategory(id: Int!, userid: Int!): ProductSubcategory!
   deleteUser(id: Int!, userid: Int!): User!
+  deleteUserCompany(id: Int!, userid: Int!): UserCompany!
   deleteZone(id: Int!, userid: Int!): Zone!
   optLogin(contact: String!): User!
   signup(signUpUserInput: SignUpUserInput!): User!
@@ -149,6 +158,7 @@ type Mutation {
   updateProductCategory(id: Int!, updateType: UpdateProductCategoryInput!): ProductCategory!
   updateProductSubcategory(id: Int!, updateType: UpdateProductSubcategoryInput!): ProductSubcategory!
   updateUser(id: Int!, updateType: UpdateUserInput!): User!
+  updateUserCompany(id: Int!, updateType: UpdateUserCompanyInput!): UserCompany!
   updateZone(id: Int!, updateType: UpdateZoneInput!): Zone!
   verifyOtp(contact: String!, otp: String!): User!
 }
@@ -167,6 +177,7 @@ type Product {
   image: String
   name: String!
   price: Float!
+  status: Status!
   subcategory: ProductSubcategory!
   subcategory_id: Int!
   updatedAt: DateTime!
@@ -239,20 +250,23 @@ type Query {
   getAllProductCategory: [ProductCategory!]!
   getAllProductSubcategory: [ProductSubcategory!]!
   getAllUser: [User!]!
+  getAllUserCompany: [UserCompany!]!
   getAllZone: [Zone!]!
   getCityById(id: Int!): City!
   getCompanyById(id: Int!): Company!
-  getPaginatedCity(searchPaginationInput: SearchPaginationInput!): CityPagination!
-  getPaginatedCompany(searchPaginationInput: SearchPaginationInput!): CompanyPagination!
-  getPaginatedProduct(searchPaginationInput: SearchPaginationInput!): ProductPagination!
-  getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput!): ProductCategoryPagination!
-  getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput!): ProductSubcategoryPagination!
-  getPaginatedUser(searchPaginationInput: SearchPaginationInput!): UserPagination!
-  getPaginatedZone(searchPaginationInput: SearchPaginationInput!): ZonePagination!
+  getPaginatedCity(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCitySearchInput!): CityPagination!
+  getPaginatedCompany(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCompanySearchInput!): CompanyPagination!
+  getPaginatedProduct(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductSearchInput!): ProductPagination!
+  getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductCategorySearchInput!): ProductCategoryPagination!
+  getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductSubcategorySearchInput!): ProductSubcategoryPagination!
+  getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
+  getPaginatedUserCompany(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserCompanySearchInput!): UserCompanyPagination!
+  getPaginatedZone(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereZoneSearchInput!): ZonePagination!
   getProductById(id: Int!): Product!
   getProductCategoryById(id: Int!): ProductCategory!
   getProductSubcategoryById(id: Int!): ProductSubcategory!
   getUserById(id: Int!): User!
+  getUserCompanyById(id: Int!): UserCompany!
   getZoneById(id: Int!): Zone!
   login(loginUserInput: LoginUserInput!): User!
 }
@@ -333,6 +347,7 @@ input UpdateProductCategoryInput {
 }
 
 input UpdateProductInput {
+  company_id: Int
   createdById: Int
   deletedAt: DateTime
   deletedById: Int
@@ -358,6 +373,16 @@ input UpdateProductSubcategoryInput {
   status: Status
   updatedAt: DateTime
   updatedById: Int
+}
+
+input UpdateUserCompanyInput {
+  company_id: Int!
+  deletedAt: DateTime
+  deletedById: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+  user_id: Int!
 }
 
 input UpdateUserInput {
@@ -396,13 +421,13 @@ type User {
   deletedBy: User
   deletedById: Int
   dob: DateTime
-  email: String!
+  email: String
   id: Int!
   is_dealer: Boolean!
   is_manufacturer: Boolean!
   name: String!
   otp: String
-  password: String!
+  password: String
   profile: String
   role: Role!
   status: Status!
@@ -413,11 +438,154 @@ type User {
   zone_id: Int!
 }
 
+type UserCompany {
+  company: Company!
+  company_id: Int!
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  user: User!
+  user_id: Int!
+}
+
+type UserCompanyPagination {
+  data: [UserCompany!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
 type UserPagination {
   data: [User!]!
   skip: Int!
   take: Int!
   total: Int!
+}
+
+input WhereCitySearchInput {
+  id: String
+  name: String
+  status: Status
+}
+
+input WhereCompanySearchInput {
+  address: String
+  contact1: String
+  contact2: String
+  contact_person: String
+  contact_person_number: String
+  createdAt: DateTime
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  designation: String
+  email: String
+  gst: String
+  id: String
+  logo: String
+  name: String
+  pan: String
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+  website: String
+  zone_id: Int
+}
+
+input WhereProductCategorySearchInput {
+  createdAt: DateTime
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  id: String
+  name: String
+  pic: String
+  priority: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+}
+
+input WhereProductSearchInput {
+  company_id: Int
+  createdAt: DateTime
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  description: String
+  id: String
+  image: String
+  name: String
+  price: Float
+  status: Status
+  subcategory_id: Int
+  updatedAt: DateTime
+  updatedById: Int
+  warranty_time: Int
+}
+
+input WhereProductSubcategorySearchInput {
+  createdAt: DateTime
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  id: String
+  name: String
+  pic: String
+  priority: Int
+  product_category_id: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+}
+
+input WhereUserCompanySearchInput {
+  company_id: Int
+  createdAt: DateTime
+  createdById: Int
+  deletedAt: DateTime
+  deletedById: Int
+  id: String
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
+  user_id: Int
+}
+
+input WhereUserSearchInput {
+  address: String
+  contact1: String
+  contact2: String
+  createdAt: DateTime
+  deletedAt: DateTime
+  dob: DateTime
+  email: String
+  id: String
+  is_dealer: Boolean
+  is_manufacturer: Boolean
+  name: String
+  otp: String
+  password: String
+  profile: String
+  role: Role
+  status: Status
+  updatedAt: DateTime
+  zone_id: Int
+}
+
+input WhereZoneSearchInput {
+  city_id: Int
+  id: String
+  name: String
+  status: Status
 }
 
 type Zone {

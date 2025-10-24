@@ -9,6 +9,7 @@ export function createBaseResolver<
   Entity,
   InputType,
   UpdateType,
+  WhereSearchInput,
   PaginationType,
   Delegate extends {
     findUnique: (args: any) => Promise<any>;
@@ -22,6 +23,7 @@ export function createBaseResolver<
   name: string,
   inputTypeClass: () => InputType,
   updateTypeClass: () => UpdateType,
+  whereSearchInputClass: () => WhereSearchInput,
   paginationTypeClass: () => PaginationType,
 ) {
   abstract class BaseResolver {
@@ -30,6 +32,7 @@ export function createBaseResolver<
         Entity,
         InputType,
         UpdateType,
+        WhereSearchInput,
         PaginationType,
         Delegate
       >,
@@ -83,8 +86,7 @@ export function createBaseResolver<
     async getPaginated(
       @Args('searchPaginationInput')
       searchPaginationInput: SearchPaginationInput,
-      @Args('whereSearchInput')
-      whereSearchInput: WhereSearchInput,
+      @Args('whereSearchInput', { type: whereSearchInputClass }) whereSearchInput: WhereSearchInput,
       @Info() info: GraphQLResolveInfo,
     ): Promise<PaginationType> {
       const fields = getSelectedFields(info);

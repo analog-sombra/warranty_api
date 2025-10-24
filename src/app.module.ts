@@ -16,6 +16,7 @@ import { ProductSubcategoryModule } from './product_subcategory/product_subcateg
 import { CompanyModule } from './company/company.module';
 import { UploaderModule } from './uploader/uploader.module';
 import { ProductModule } from './product/product.module';
+import { UserCompanyModule } from './user_company/user_company.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { ProductModule } from './product/product.module';
     CompanyModule,
     UploaderModule,
     ProductModule,
+    UserCompanyModule,
     // BaseModule,
   ],
   controllers: [AppController],

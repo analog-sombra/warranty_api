@@ -5,6 +5,7 @@ import { Prisma, zone } from '@prisma/client';
 import { DefaultArgs } from 'generated/prisma/runtime/library';
 import { CreateZoneInput } from './dto/create-zone.input';
 import { UpdateZoneInput } from './dto/update-zone.input';
+import { WhereZoneSearchInput } from './dto/search-zone.input';
 import { ZonePagination } from './zone.resolver';
 
 @Injectable()
@@ -12,6 +13,7 @@ export class ZoneService extends BaseService<
   zone,
   typeof CreateZoneInput,
   typeof UpdateZoneInput,
+  typeof WhereZoneSearchInput,
   typeof ZonePagination,
   Prisma.zoneDelegate<DefaultArgs, Prisma.PrismaClientOptions>
 > {

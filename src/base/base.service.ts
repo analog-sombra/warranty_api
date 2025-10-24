@@ -8,6 +8,7 @@ export class BaseService<
   T,
   InputType,
   UpdateType,
+  WhereSearchInput,
   PaginationType,
   D extends {
     findUnique: (args: any) => Promise<T | null>;
@@ -165,7 +166,7 @@ export class BaseService<
     }
   }
 
-  async getPaginated(searchPaginationInput: SearchPaginationInput, fields: SelectedFields) {
+  async getPaginated(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSearchInput, fields: SelectedFields) {
     try {
       const sample = await this.delegate.findMany({ take: 1 });
       if (!sample || sample.length === 0) {
@@ -186,6 +187,15 @@ export class BaseService<
             contains: searchPaginationInput.search,
           };
         }
+      }
+
+      if (whereSearchInput) {
+        Object.keys(whereSearchInput).forEach((key) => {
+          const value = (whereSearchInput as Record<string, any>)[key];
+          if (value !== undefined && value !== null) {
+            where[key] = value;
+          }
+        });
       }
 
       const [data, total] = await Promise.all([

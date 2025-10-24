@@ -6,6 +6,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 import { createBaseResolver } from 'src/base/base.resolver';
 import { Prisma, product as ProductModel } from '@prisma/client';
+import { WhereProductSearchInput } from './dto/search-product.input';
 
 @ObjectType()
 export class ProductPagination extends BasePaginated(Product) {}
@@ -15,6 +16,7 @@ const BaseProductResolver = createBaseResolver<
   ProductModel,
   typeof CreateProductInput,
   typeof UpdateProductInput,
+  typeof WhereProductSearchInput,
   typeof ProductPagination,
   Prisma.productDelegate<any>
 >(
@@ -22,6 +24,7 @@ const BaseProductResolver = createBaseResolver<
   'Product',
   () => CreateProductInput,
   () => UpdateProductInput,
+  () => WhereProductSearchInput,
   () => ProductPagination,
 );
 

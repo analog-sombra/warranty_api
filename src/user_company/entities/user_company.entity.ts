@@ -1,40 +1,24 @@
-import { ObjectType, Field, Int, Float } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Status } from '@prisma/client';
 import { Company } from 'src/company/entities/company.entity';
-import { ProductSubcategory } from 'src/product_subcategory/entities/product_subcategory.entity';
 import { User } from 'src/user/entities/user.entity';
 
 @ObjectType()
-export class Product {
+export class UserCompany {
   @Field(() => Int)
   id: number;
 
-  @Field(() => String)
-  name: string;
-
-  @Field(() => String, { nullable: true })
-  image: string;
-
   @Field(() => Int)
-  subcategory_id: number;
+  user_id: number;
+
+  @Field(() => User)
+  user: User;
 
   @Field(() => Int)
   company_id: number;
 
   @Field(() => Company)
   company: Company;
-
-  @Field(() => ProductSubcategory)
-  subcategory: ProductSubcategory;
-
-  @Field(() => Int)
-  warranty_time: number;
-
-  @Field(() => String, { nullable: true })
-  description?: string;
-
-  @Field(() => Float)
-  price: number;
 
   @Field(() => Status)
   status: Status;
@@ -52,17 +36,17 @@ export class Product {
   updatedAt: Date;
 
   @Field(() => Int, { nullable: true })
-  updatedById?: number;
+  updatedById: number;
 
   @Field(() => User, { nullable: true })
-  updatedBy?: User;
+  updatedBy: User;
 
   @Field(() => Date, { nullable: true })
   deletedAt?: Date;
 
   @Field(() => Int, { nullable: true })
-  deletedById?: number;
+  deletedById: number;
 
   @Field(() => User, { nullable: true })
-  deletedBy?: User;
+  deletedBy: User;
 }
