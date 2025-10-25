@@ -45,12 +45,34 @@ export interface CreateCompanyInput {
     designation: string;
     email: string;
     gst?: Nullable<string>;
+    is_dealer: boolean;
     logo: string;
     name: string;
     pan?: Nullable<string>;
     status?: Nullable<Status>;
     website?: Nullable<string>;
     zone_id: number;
+}
+
+export interface CreateDealerSalesInput {
+    batch_number: string;
+    company_id: number;
+    createdById: number;
+    dealer_id: number;
+    product_id: number;
+    quantity: number;
+    sale_date?: Nullable<DateTime>;
+    warranty_till: number;
+}
+
+export interface CreateDealerStockInput {
+    batch_number: string;
+    company_id: number;
+    createdById: number;
+    dealer_id: number;
+    product_id: number;
+    quantity: number;
+    status?: Nullable<Status>;
 }
 
 export interface CreateProductCategoryInput {
@@ -82,8 +104,18 @@ export interface CreateProductSubcategoryInput {
     status?: Nullable<Status>;
 }
 
+export interface CreateSalesInput {
+    company_id: number;
+    createdById: number;
+    customer_id: number;
+    dealer_id: number;
+    product_id: number;
+    warranty_till: number;
+}
+
 export interface CreateUserCompanyInput {
     company_id: number;
+    createdById: number;
     status?: Nullable<Status>;
     user_id: number;
 }
@@ -145,6 +177,7 @@ export interface UpdateCompanyInput {
     designation?: Nullable<string>;
     email?: Nullable<string>;
     gst?: Nullable<string>;
+    is_dealer?: Nullable<boolean>;
     logo?: Nullable<string>;
     name?: Nullable<string>;
     pan?: Nullable<string>;
@@ -153,6 +186,31 @@ export interface UpdateCompanyInput {
     updatedById?: Nullable<number>;
     website?: Nullable<string>;
     zone_id?: Nullable<number>;
+}
+
+export interface UpdateDealerSalesInput {
+    batch_number?: Nullable<string>;
+    company_id?: Nullable<number>;
+    createdById?: Nullable<number>;
+    dealer_id?: Nullable<number>;
+    product_id?: Nullable<number>;
+    quantity?: Nullable<number>;
+    sale_date?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    warranty_till?: Nullable<number>;
+}
+
+export interface UpdateDealerStockInput {
+    batch_number?: Nullable<string>;
+    company_id?: Nullable<number>;
+    createdById?: Nullable<number>;
+    dealer_id?: Nullable<number>;
+    product_id?: Nullable<number>;
+    quantity?: Nullable<number>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
 }
 
 export interface UpdateProductCategoryInput {
@@ -196,8 +254,20 @@ export interface UpdateProductSubcategoryInput {
     updatedById?: Nullable<number>;
 }
 
+export interface UpdateSalesInput {
+    company_id?: Nullable<number>;
+    createdById?: Nullable<number>;
+    customer_id?: Nullable<number>;
+    dealer_id?: Nullable<number>;
+    product_id?: Nullable<number>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    warranty_till?: Nullable<number>;
+}
+
 export interface UpdateUserCompanyInput {
     company_id: number;
+    createdById?: Nullable<number>;
     deletedAt?: Nullable<DateTime>;
     deletedById?: Nullable<number>;
     status?: Nullable<Status>;
@@ -251,6 +321,7 @@ export interface WhereCompanySearchInput {
     email?: Nullable<string>;
     gst?: Nullable<string>;
     id?: Nullable<string>;
+    is_dealer?: Nullable<boolean>;
     logo?: Nullable<string>;
     name?: Nullable<string>;
     pan?: Nullable<string>;
@@ -259,6 +330,35 @@ export interface WhereCompanySearchInput {
     updatedById?: Nullable<number>;
     website?: Nullable<string>;
     zone_id?: Nullable<number>;
+}
+
+export interface WhereDealerSalesSearchInput {
+    batch_number?: Nullable<string>;
+    company_id?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    dealer_id?: Nullable<number>;
+    id?: Nullable<string>;
+    product_id?: Nullable<number>;
+    quantity?: Nullable<number>;
+    sale_date?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    warranty_till?: Nullable<number>;
+}
+
+export interface WhereDealerStockSearchInput {
+    batch_number?: Nullable<string>;
+    company_id?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    dealer_id?: Nullable<number>;
+    id?: Nullable<string>;
+    product_id?: Nullable<number>;
+    quantity?: Nullable<number>;
+    status?: Nullable<Status>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
 }
 
 export interface WhereProductCategorySearchInput {
@@ -306,6 +406,20 @@ export interface WhereProductSubcategorySearchInput {
     status?: Nullable<Status>;
     updatedAt?: Nullable<DateTime>;
     updatedById?: Nullable<number>;
+}
+
+export interface WhereSalesSearchInput {
+    company_id?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    customer_id?: Nullable<number>;
+    dealer_id?: Nullable<number>;
+    id?: Nullable<string>;
+    product_id?: Nullable<number>;
+    sale_date?: Nullable<DateTime>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+    warranty_till?: Nullable<number>;
 }
 
 export interface WhereUserCompanySearchInput {
@@ -374,6 +488,7 @@ export interface Company {
     email: string;
     gst?: Nullable<string>;
     id: number;
+    is_dealer: boolean;
     logo: string;
     name: string;
     pan?: Nullable<string>;
@@ -391,20 +506,79 @@ export interface CompanyPagination {
     total: number;
 }
 
+export interface DealerSales {
+    batch_number: string;
+    company: Company;
+    company_id: number;
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    dealer: Company;
+    dealer_id: number;
+    id: number;
+    product: Product;
+    product_id: number;
+    quantity: number;
+    sale_date: DateTime;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+    warranty_till: number;
+}
+
+export interface DealerSalesPagination {
+    data: DealerSales[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
+export interface DealerStock {
+    batch_number: string;
+    company: Company;
+    company_id: number;
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    dealer: Company;
+    dealer_id: number;
+    id: number;
+    product: Product;
+    product_id: number;
+    quantity: number;
+    status: Status;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+}
+
+export interface DealerStockPagination {
+    data: DealerStock[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface IMutation {
     createCity(inputType: CreateCityInput): City | Promise<City>;
     createCompany(inputType: CreateCompanyInput): Company | Promise<Company>;
+    createDealerSales(inputType: CreateDealerSalesInput): DealerSales | Promise<DealerSales>;
+    createDealerStock(inputType: CreateDealerStockInput): DealerStock | Promise<DealerStock>;
     createProduct(inputType: CreateProductInput): Product | Promise<Product>;
     createProductCategory(inputType: CreateProductCategoryInput): ProductCategory | Promise<ProductCategory>;
     createProductSubcategory(inputType: CreateProductSubcategoryInput): ProductSubcategory | Promise<ProductSubcategory>;
+    createSales(inputType: CreateSalesInput): Sales | Promise<Sales>;
     createUser(inputType: CreateUserInput): User | Promise<User>;
     createUserCompany(inputType: CreateUserCompanyInput): UserCompany | Promise<UserCompany>;
     createZone(inputType: CreateZoneInput): Zone | Promise<Zone>;
     deleteCity(id: number, userid: number): City | Promise<City>;
     deleteCompany(id: number, userid: number): Company | Promise<Company>;
+    deleteDealerSales(id: number, userid: number): DealerSales | Promise<DealerSales>;
+    deleteDealerStock(id: number, userid: number): DealerStock | Promise<DealerStock>;
     deleteProduct(id: number, userid: number): Product | Promise<Product>;
     deleteProductCategory(id: number, userid: number): ProductCategory | Promise<ProductCategory>;
     deleteProductSubcategory(id: number, userid: number): ProductSubcategory | Promise<ProductSubcategory>;
+    deleteSales(id: number, userid: number): Sales | Promise<Sales>;
     deleteUser(id: number, userid: number): User | Promise<User>;
     deleteUserCompany(id: number, userid: number): UserCompany | Promise<UserCompany>;
     deleteZone(id: number, userid: number): Zone | Promise<Zone>;
@@ -412,9 +586,12 @@ export interface IMutation {
     signup(signUpUserInput: SignUpUserInput): User | Promise<User>;
     updateCity(id: number, updateType: UpdateCityInput): City | Promise<City>;
     updateCompany(id: number, updateType: UpdateCompanyInput): Company | Promise<Company>;
+    updateDealerSales(id: number, updateType: UpdateDealerSalesInput): DealerSales | Promise<DealerSales>;
+    updateDealerStock(id: number, updateType: UpdateDealerStockInput): DealerStock | Promise<DealerStock>;
     updateProduct(id: number, updateType: UpdateProductInput): Product | Promise<Product>;
     updateProductCategory(id: number, updateType: UpdateProductCategoryInput): ProductCategory | Promise<ProductCategory>;
     updateProductSubcategory(id: number, updateType: UpdateProductSubcategoryInput): ProductSubcategory | Promise<ProductSubcategory>;
+    updateSales(id: number, updateType: UpdateSalesInput): Sales | Promise<Sales>;
     updateUser(id: number, updateType: UpdateUserInput): User | Promise<User>;
     updateUserCompany(id: number, updateType: UpdateUserCompanyInput): UserCompany | Promise<UserCompany>;
     updateZone(id: number, updateType: UpdateZoneInput): Zone | Promise<Zone>;
@@ -502,31 +679,78 @@ export interface ProductSubcategoryPagination {
 }
 
 export interface IQuery {
-    getAllCity(): City[] | Promise<City[]>;
-    getAllCompany(): Company[] | Promise<Company[]>;
-    getAllProduct(): Product[] | Promise<Product[]>;
-    getAllProductCategory(): ProductCategory[] | Promise<ProductCategory[]>;
-    getAllProductSubcategory(): ProductSubcategory[] | Promise<ProductSubcategory[]>;
-    getAllUser(): User[] | Promise<User[]>;
-    getAllUserCompany(): UserCompany[] | Promise<UserCompany[]>;
-    getAllZone(): Zone[] | Promise<Zone[]>;
+    getAllCity(whereSearchInput: WhereCitySearchInput): City[] | Promise<City[]>;
+    getAllCompany(whereSearchInput: WhereCompanySearchInput): Company[] | Promise<Company[]>;
+    getAllDealerSales(whereSearchInput: WhereDealerSalesSearchInput): DealerSales[] | Promise<DealerSales[]>;
+    getAllDealerStock(whereSearchInput: WhereDealerStockSearchInput): DealerStock[] | Promise<DealerStock[]>;
+    getAllProduct(whereSearchInput: WhereProductSearchInput): Product[] | Promise<Product[]>;
+    getAllProductCategory(whereSearchInput: WhereProductCategorySearchInput): ProductCategory[] | Promise<ProductCategory[]>;
+    getAllProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput): ProductSubcategory[] | Promise<ProductSubcategory[]>;
+    getAllSales(whereSearchInput: WhereSalesSearchInput): Sales[] | Promise<Sales[]>;
+    getAllUser(whereSearchInput: WhereUserSearchInput): User[] | Promise<User[]>;
+    getAllUserCompany(whereSearchInput: WhereUserCompanySearchInput): UserCompany[] | Promise<UserCompany[]>;
+    getAllZone(whereSearchInput: WhereZoneSearchInput): Zone[] | Promise<Zone[]>;
     getCityById(id: number): City | Promise<City>;
     getCompanyById(id: number): Company | Promise<Company>;
+    getDealerSalesById(id: number): DealerSales | Promise<DealerSales>;
+    getDealerStockById(id: number): DealerStock | Promise<DealerStock>;
     getPaginatedCity(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCitySearchInput): CityPagination | Promise<CityPagination>;
     getPaginatedCompany(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCompanySearchInput): CompanyPagination | Promise<CompanyPagination>;
+    getPaginatedDealerSales(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDealerSalesSearchInput): DealerSalesPagination | Promise<DealerSalesPagination>;
+    getPaginatedDealerStock(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDealerStockSearchInput): DealerStockPagination | Promise<DealerStockPagination>;
     getPaginatedProduct(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductSearchInput): ProductPagination | Promise<ProductPagination>;
     getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductCategorySearchInput): ProductCategoryPagination | Promise<ProductCategoryPagination>;
     getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductSubcategorySearchInput): ProductSubcategoryPagination | Promise<ProductSubcategoryPagination>;
+    getPaginatedSales(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSalesSearchInput): SalesPagination | Promise<SalesPagination>;
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
     getPaginatedUserCompany(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserCompanySearchInput): UserCompanyPagination | Promise<UserCompanyPagination>;
     getPaginatedZone(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereZoneSearchInput): ZonePagination | Promise<ZonePagination>;
     getProductById(id: number): Product | Promise<Product>;
     getProductCategoryById(id: number): ProductCategory | Promise<ProductCategory>;
     getProductSubcategoryById(id: number): ProductSubcategory | Promise<ProductSubcategory>;
+    getSalesById(id: number): Sales | Promise<Sales>;
     getUserById(id: number): User | Promise<User>;
     getUserCompanyById(id: number): UserCompany | Promise<UserCompany>;
     getZoneById(id: number): Zone | Promise<Zone>;
     login(loginUserInput: LoginUserInput): User | Promise<User>;
+    searchCity(whereSearchInput: WhereCitySearchInput): Nullable<City> | Promise<Nullable<City>>;
+    searchCompany(whereSearchInput: WhereCompanySearchInput): Nullable<Company> | Promise<Nullable<Company>>;
+    searchDealerSales(whereSearchInput: WhereDealerSalesSearchInput): Nullable<DealerSales> | Promise<Nullable<DealerSales>>;
+    searchDealerStock(whereSearchInput: WhereDealerStockSearchInput): Nullable<DealerStock> | Promise<Nullable<DealerStock>>;
+    searchProduct(whereSearchInput: WhereProductSearchInput): Nullable<Product> | Promise<Nullable<Product>>;
+    searchProductCategory(whereSearchInput: WhereProductCategorySearchInput): Nullable<ProductCategory> | Promise<Nullable<ProductCategory>>;
+    searchProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput): Nullable<ProductSubcategory> | Promise<Nullable<ProductSubcategory>>;
+    searchSales(whereSearchInput: WhereSalesSearchInput): Nullable<Sales> | Promise<Nullable<Sales>>;
+    searchUser(whereSearchInput: WhereUserSearchInput): Nullable<User> | Promise<Nullable<User>>;
+    searchUserCompany(whereSearchInput: WhereUserCompanySearchInput): Nullable<UserCompany> | Promise<Nullable<UserCompany>>;
+    searchZone(whereSearchInput: WhereZoneSearchInput): Nullable<Zone> | Promise<Nullable<Zone>>;
+}
+
+export interface Sales {
+    company: Company;
+    company_id: number;
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    customer: User;
+    customer_id: number;
+    dealer: Company;
+    dealer_id: number;
+    id: number;
+    product: Product;
+    product_id: number;
+    sale_date: DateTime;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+    warranty_till: number;
+}
+
+export interface SalesPagination {
+    data: Sales[];
+    skip: number;
+    take: number;
+    total: number;
 }
 
 export interface User {

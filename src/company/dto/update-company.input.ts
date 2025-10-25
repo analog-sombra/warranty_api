@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDate,
   IsEnum,
   IsInt,
@@ -53,6 +54,13 @@ export class UpdateCompanyInput extends PartialType(CreateCompanyInput) {
     nullable: true,
   })
   zone_id: number;
+
+  @IsOptional()
+  @IsBoolean()
+  @Field(() => Boolean, {
+    nullable: true,
+  })
+  is_dealer: boolean;
 
   @IsOptional()
   @IsString()

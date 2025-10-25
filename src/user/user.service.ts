@@ -4,7 +4,7 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { WhereUserSearchInput } from './dto/search-user.input';
 import { BaseService } from 'src/base/base.service';
 import { UserPagination } from './user.resolver';
-import { DefaultArgs } from 'generated/prisma/runtime/library';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'prisma/prisma.service';
 import { Prisma, user } from '@prisma/client';
 @Injectable()

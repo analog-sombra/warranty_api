@@ -1,6 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { Status } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 @InputType()
 export class CreateUserCompanyInput {
@@ -20,4 +20,9 @@ export class CreateUserCompanyInput {
     nullable: true,
   })
   status: Status;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Field(() => Int)
+  createdById: number;
 }

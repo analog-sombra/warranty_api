@@ -17,6 +17,9 @@ import { CompanyModule } from './company/company.module';
 import { UploaderModule } from './uploader/uploader.module';
 import { ProductModule } from './product/product.module';
 import { UserCompanyModule } from './user_company/user_company.module';
+import { SalesModule } from './sales/sales.module';
+import { DealerSalesModule } from './dealer_sales/dealer_sales.module';
+import { DealerStockModule } from './dealer_stock/dealer_stock.module';
 
 @Module({
   imports: [
@@ -46,9 +49,12 @@ import { UserCompanyModule } from './user_company/user_company.module';
     UploaderModule,
     ProductModule,
     UserCompanyModule,
+    SalesModule,
+    DealerSalesModule,
+    DealerStockModule,
     // BaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

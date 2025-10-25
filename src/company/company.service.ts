@@ -4,7 +4,7 @@ import { UpdateCompanyInput } from './dto/update-company.input';
 import { WhereCompanySearchInput } from './dto/search-company.input';
 import { BaseService } from 'src/base/base.service';
 import { CompanyPagination } from './company.resolver';
-import { DefaultArgs } from 'generated/prisma/runtime/library';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { company, Prisma } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
 

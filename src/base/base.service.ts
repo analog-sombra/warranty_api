@@ -12,7 +12,9 @@ export class BaseService<
   PaginationType,
   D extends {
     findUnique: (args: any) => Promise<T | null>;
+    findFirst: (args: any) => Promise<T | null>;
     findMany: (args: any) => Promise<T[]>;
+    count: (args: any) => Promise<number>;
     create: (args: any) => Promise<T>;
     update: (args: any) => Promise<T>;
     delete: (args: any) => Promise<T>;
@@ -38,17 +40,57 @@ export class BaseService<
       throw new BadRequestException(`error: ${error}`);
     }
   }
-  async getAll(fields: SelectedFields) {
+
+  async search(whereSearchInput: WhereSearchInput, fields: SelectedFields) {
+    try {
+      const sample = await this.delegate.findMany({ take: 1 });
+      if (!sample || sample.length === 0) {
+        throw new BadRequestException(`Could not find ${this.modelName}`);
+      }
+      const firstRecord = sample[0] as Record<string, any>;
+
+      const hasDeletedAt = 'deletedAt' in firstRecord;
+      const hasDeletedById = 'deletedById' in firstRecord;
+
+      const where: Record<string, any> = {};
+      if (hasDeletedAt) where.deletedAt = null;
+      if (hasDeletedById) where.deletedById = null;
+
+      // Apply search filters from whereSearchInput
+      if (whereSearchInput) {
+        Object.keys(whereSearchInput).forEach((key) => {
+          const value = (whereSearchInput as Record<string, any>)[key];
+          if (value !== undefined && value !== null) {
+            where[key] = value;
+          }
+        });
+      }
+
+      const item = await this.delegate.findFirst({
+        where,
+        select: fields,
+      });
+
+      return item;
+    } catch (error) {
+      throw new BadRequestException(`error: ${error}`);
+    }
+  }
+
+  async getAll(fields: SelectedFields, whereSearchInput: WhereSearchInput) {
     try {
       const item = await this.delegate.findMany({
         where: {
-          status: 'ACTIVE',
+          ...whereSearchInput,
         },
         select: fields,
       });
-      if (!item) {
-        throw new BadRequestException(`${this.modelName} not found`);
+      if (item.length === 0) {
+        return [];
       }
+      // if (!item) {
+      //   throw new BadRequestException(`${this.modelName} not found`);
+      // }
       return item;
     } catch (error) {
       throw new BadRequestException(`error: ${error}`);
@@ -64,6 +106,7 @@ export class BaseService<
         data: processedInput,
         select: fields,
       });
+
 
       if (!item) {
         throw new BadRequestException(`Could not create ${this.modelName}`);
@@ -170,7 +213,12 @@ export class BaseService<
     try {
       const sample = await this.delegate.findMany({ take: 1 });
       if (!sample || sample.length === 0) {
-        throw new BadRequestException(`Could not find ${this.modelName}`);
+        return {
+          data: [],
+          total: 0,
+          skip: searchPaginationInput.skip,
+          take: searchPaginationInput.take,
+        } as unknown as PaginationType;
       }
       const firstRecord = sample[0] as Record<string, any>;
 
@@ -205,15 +253,14 @@ export class BaseService<
           where,
           select: fields["data"]["select"],
         }),
-        this.delegate.findMany({
+        this.delegate.count({
           where,
-          select: { id: true },
         }),
       ]);
 
       return {
         data,
-        total: total.length,
+        total,
         skip: searchPaginationInput.skip,
         take: searchPaginationInput.take,
       } as unknown as PaginationType;

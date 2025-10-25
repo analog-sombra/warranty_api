@@ -22,6 +22,9 @@ export class Company {
   @Field(() => String, { nullable: true })
   address?: string;
 
+  @Field(() => Boolean)
+  is_dealer: boolean;
+
   @Field(() => Zone)
   zone: Zone;
 

@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 import { CreateCompanyInput } from './create-company.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 import { Status } from '@prisma/client';
@@ -39,6 +39,11 @@ export class WhereCompanySearchInput extends PartialType(CreateCompanyInput) {
     @IsInt()
     @Field(() => Int, { nullable: true })
     zone_id?: number;
+
+    @IsOptional()
+    @IsBoolean()
+    @Field(() => Boolean, { nullable: true })
+    is_dealer?: boolean;
 
     @IsOptional()
     @IsString()

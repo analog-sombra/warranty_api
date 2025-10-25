@@ -5,7 +5,7 @@ import { WhereUserCompanySearchInput } from './dto/search-user_company.input';
 import { UserCompanyPagination } from './user_company.resolver';
 import { Prisma, user_company } from '@prisma/client';
 import { BaseService } from 'src/base/base.service';
-import { DefaultArgs } from 'generated/prisma/runtime/library';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'prisma/prisma.service';
 
 

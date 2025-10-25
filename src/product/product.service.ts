@@ -4,7 +4,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { BaseService } from 'src/base/base.service';
 import { Prisma, product } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
-import { DefaultArgs } from 'generated/prisma/runtime/library';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { ProductPagination } from './product.resolver';
 import { WhereProductSearchInput } from './dto/search-product.input';
 

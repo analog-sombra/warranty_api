@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { BaseService } from 'src/base/base.service';
 import { Prisma, zone } from '@prisma/client';
-import { DefaultArgs } from 'generated/prisma/runtime/library';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { CreateZoneInput } from './dto/create-zone.input';
 import { UpdateZoneInput } from './dto/update-zone.input';
 import { WhereZoneSearchInput } from './dto/search-zone.input';

@@ -1,6 +1,7 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
 import { Status } from '@prisma/client';
 import {
+  IsBoolean,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -44,6 +45,11 @@ export class CreateCompanyInput {
   @IsNumber()
   @Field(() => Int)
   zone_id: number;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  @Field(() => Boolean)
+  is_dealer: boolean;
 
   @IsNotEmpty()
   @IsString()

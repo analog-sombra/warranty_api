@@ -27,6 +27,7 @@ type Company {
   email: String!
   gst: String
   id: Int!
+  is_dealer: Boolean!
   logo: String!
   name: String!
   pan: String
@@ -58,12 +59,34 @@ input CreateCompanyInput {
   designation: String!
   email: String!
   gst: String
+  is_dealer: Boolean!
   logo: String!
   name: String!
   pan: String
   status: Status
   website: String
   zone_id: Int!
+}
+
+input CreateDealerSalesInput {
+  batch_number: String!
+  company_id: Int!
+  createdById: Int!
+  dealer_id: Int!
+  product_id: Int!
+  quantity: Int!
+  sale_date: DateTime
+  warranty_till: Int!
+}
+
+input CreateDealerStockInput {
+  batch_number: String!
+  company_id: Int!
+  createdById: Int!
+  dealer_id: Int!
+  product_id: Int!
+  quantity: Int!
+  status: Status
 }
 
 input CreateProductCategoryInput {
@@ -95,8 +118,18 @@ input CreateProductSubcategoryInput {
   status: Status
 }
 
+input CreateSalesInput {
+  company_id: Int!
+  createdById: Int!
+  customer_id: Int!
+  dealer_id: Int!
+  product_id: Int!
+  warranty_till: Int!
+}
+
 input CreateUserCompanyInput {
   company_id: Int!
+  createdById: Int!
   status: Status
   user_id: Int!
 }
@@ -128,6 +161,59 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type DealerSales {
+  batch_number: String!
+  company: Company!
+  company_id: Int!
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  dealer: Company!
+  dealer_id: Int!
+  id: Int!
+  product: Product!
+  product_id: Int!
+  quantity: Int!
+  sale_date: DateTime!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  warranty_till: Int!
+}
+
+type DealerSalesPagination {
+  data: [DealerSales!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type DealerStock {
+  batch_number: String!
+  company: Company!
+  company_id: Int!
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  dealer: Company!
+  dealer_id: Int!
+  id: Int!
+  product: Product!
+  product_id: Int!
+  quantity: Int!
+  status: Status!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type DealerStockPagination {
+  data: [DealerStock!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
 input LoginUserInput {
   contact: String!
   password: String!
@@ -136,17 +222,23 @@ input LoginUserInput {
 type Mutation {
   createCity(inputType: CreateCityInput!): City!
   createCompany(inputType: CreateCompanyInput!): Company!
+  createDealerSales(inputType: CreateDealerSalesInput!): DealerSales!
+  createDealerStock(inputType: CreateDealerStockInput!): DealerStock!
   createProduct(inputType: CreateProductInput!): Product!
   createProductCategory(inputType: CreateProductCategoryInput!): ProductCategory!
   createProductSubcategory(inputType: CreateProductSubcategoryInput!): ProductSubcategory!
+  createSales(inputType: CreateSalesInput!): Sales!
   createUser(inputType: CreateUserInput!): User!
   createUserCompany(inputType: CreateUserCompanyInput!): UserCompany!
   createZone(inputType: CreateZoneInput!): Zone!
   deleteCity(id: Int!, userid: Int!): City!
   deleteCompany(id: Int!, userid: Int!): Company!
+  deleteDealerSales(id: Int!, userid: Int!): DealerSales!
+  deleteDealerStock(id: Int!, userid: Int!): DealerStock!
   deleteProduct(id: Int!, userid: Int!): Product!
   deleteProductCategory(id: Int!, userid: Int!): ProductCategory!
   deleteProductSubcategory(id: Int!, userid: Int!): ProductSubcategory!
+  deleteSales(id: Int!, userid: Int!): Sales!
   deleteUser(id: Int!, userid: Int!): User!
   deleteUserCompany(id: Int!, userid: Int!): UserCompany!
   deleteZone(id: Int!, userid: Int!): Zone!
@@ -154,9 +246,12 @@ type Mutation {
   signup(signUpUserInput: SignUpUserInput!): User!
   updateCity(id: Int!, updateType: UpdateCityInput!): City!
   updateCompany(id: Int!, updateType: UpdateCompanyInput!): Company!
+  updateDealerSales(id: Int!, updateType: UpdateDealerSalesInput!): DealerSales!
+  updateDealerStock(id: Int!, updateType: UpdateDealerStockInput!): DealerStock!
   updateProduct(id: Int!, updateType: UpdateProductInput!): Product!
   updateProductCategory(id: Int!, updateType: UpdateProductCategoryInput!): ProductCategory!
   updateProductSubcategory(id: Int!, updateType: UpdateProductSubcategoryInput!): ProductSubcategory!
+  updateSales(id: Int!, updateType: UpdateSalesInput!): Sales!
   updateUser(id: Int!, updateType: UpdateUserInput!): User!
   updateUserCompany(id: Int!, updateType: UpdateUserCompanyInput!): UserCompany!
   updateZone(id: Int!, updateType: UpdateZoneInput!): Zone!
@@ -244,31 +339,51 @@ type ProductSubcategoryPagination {
 }
 
 type Query {
-  getAllCity: [City!]!
-  getAllCompany: [Company!]!
-  getAllProduct: [Product!]!
-  getAllProductCategory: [ProductCategory!]!
-  getAllProductSubcategory: [ProductSubcategory!]!
-  getAllUser: [User!]!
-  getAllUserCompany: [UserCompany!]!
-  getAllZone: [Zone!]!
+  getAllCity(whereSearchInput: WhereCitySearchInput!): [City!]!
+  getAllCompany(whereSearchInput: WhereCompanySearchInput!): [Company!]!
+  getAllDealerSales(whereSearchInput: WhereDealerSalesSearchInput!): [DealerSales!]!
+  getAllDealerStock(whereSearchInput: WhereDealerStockSearchInput!): [DealerStock!]!
+  getAllProduct(whereSearchInput: WhereProductSearchInput!): [Product!]!
+  getAllProductCategory(whereSearchInput: WhereProductCategorySearchInput!): [ProductCategory!]!
+  getAllProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput!): [ProductSubcategory!]!
+  getAllSales(whereSearchInput: WhereSalesSearchInput!): [Sales!]!
+  getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
+  getAllUserCompany(whereSearchInput: WhereUserCompanySearchInput!): [UserCompany!]!
+  getAllZone(whereSearchInput: WhereZoneSearchInput!): [Zone!]!
   getCityById(id: Int!): City!
   getCompanyById(id: Int!): Company!
+  getDealerSalesById(id: Int!): DealerSales!
+  getDealerStockById(id: Int!): DealerStock!
   getPaginatedCity(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCitySearchInput!): CityPagination!
   getPaginatedCompany(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCompanySearchInput!): CompanyPagination!
+  getPaginatedDealerSales(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDealerSalesSearchInput!): DealerSalesPagination!
+  getPaginatedDealerStock(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDealerStockSearchInput!): DealerStockPagination!
   getPaginatedProduct(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductSearchInput!): ProductPagination!
   getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductCategorySearchInput!): ProductCategoryPagination!
   getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductSubcategorySearchInput!): ProductSubcategoryPagination!
+  getPaginatedSales(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSalesSearchInput!): SalesPagination!
   getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
   getPaginatedUserCompany(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserCompanySearchInput!): UserCompanyPagination!
   getPaginatedZone(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereZoneSearchInput!): ZonePagination!
   getProductById(id: Int!): Product!
   getProductCategoryById(id: Int!): ProductCategory!
   getProductSubcategoryById(id: Int!): ProductSubcategory!
+  getSalesById(id: Int!): Sales!
   getUserById(id: Int!): User!
   getUserCompanyById(id: Int!): UserCompany!
   getZoneById(id: Int!): Zone!
   login(loginUserInput: LoginUserInput!): User!
+  searchCity(whereSearchInput: WhereCitySearchInput!): City
+  searchCompany(whereSearchInput: WhereCompanySearchInput!): Company
+  searchDealerSales(whereSearchInput: WhereDealerSalesSearchInput!): DealerSales
+  searchDealerStock(whereSearchInput: WhereDealerStockSearchInput!): DealerStock
+  searchProduct(whereSearchInput: WhereProductSearchInput!): Product
+  searchProductCategory(whereSearchInput: WhereProductCategorySearchInput!): ProductCategory
+  searchProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput!): ProductSubcategory
+  searchSales(whereSearchInput: WhereSalesSearchInput!): Sales
+  searchUser(whereSearchInput: WhereUserSearchInput!): User
+  searchUserCompany(whereSearchInput: WhereUserCompanySearchInput!): UserCompany
+  searchZone(whereSearchInput: WhereZoneSearchInput!): Zone
 }
 
 enum Role {
@@ -287,6 +402,33 @@ enum Role {
   SYSTEM
   TECHNICAL
   USER
+}
+
+type Sales {
+  company: Company!
+  company_id: Int!
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  customer: User!
+  customer_id: Int!
+  dealer: Company!
+  dealer_id: Int!
+  id: Int!
+  product: Product!
+  product_id: Int!
+  sale_date: DateTime!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+  warranty_till: Int!
+}
+
+type SalesPagination {
+  data: [Sales!]!
+  skip: Int!
+  take: Int!
+  total: Int!
 }
 
 input SearchPaginationInput {
@@ -324,6 +466,7 @@ input UpdateCompanyInput {
   designation: String
   email: String
   gst: String
+  is_dealer: Boolean
   logo: String
   name: String
   pan: String
@@ -332,6 +475,31 @@ input UpdateCompanyInput {
   updatedById: Int
   website: String
   zone_id: Int
+}
+
+input UpdateDealerSalesInput {
+  batch_number: String
+  company_id: Int
+  createdById: Int
+  dealer_id: Int
+  product_id: Int
+  quantity: Int
+  sale_date: DateTime
+  updatedAt: DateTime
+  updatedById: Int
+  warranty_till: Int
+}
+
+input UpdateDealerStockInput {
+  batch_number: String
+  company_id: Int
+  createdById: Int
+  dealer_id: Int
+  product_id: Int
+  quantity: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
 }
 
 input UpdateProductCategoryInput {
@@ -375,8 +543,20 @@ input UpdateProductSubcategoryInput {
   updatedById: Int
 }
 
+input UpdateSalesInput {
+  company_id: Int
+  createdById: Int
+  customer_id: Int
+  dealer_id: Int
+  product_id: Int
+  updatedAt: DateTime
+  updatedById: Int
+  warranty_till: Int
+}
+
 input UpdateUserCompanyInput {
   company_id: Int!
+  createdById: Int
   deletedAt: DateTime
   deletedById: Int
   status: Status
@@ -490,6 +670,7 @@ input WhereCompanySearchInput {
   email: String
   gst: String
   id: String
+  is_dealer: Boolean
   logo: String
   name: String
   pan: String
@@ -498,6 +679,35 @@ input WhereCompanySearchInput {
   updatedById: Int
   website: String
   zone_id: Int
+}
+
+input WhereDealerSalesSearchInput {
+  batch_number: String
+  company_id: Int
+  createdAt: DateTime
+  createdById: Int
+  dealer_id: Int
+  id: String
+  product_id: Int
+  quantity: Int
+  sale_date: DateTime
+  updatedAt: DateTime
+  updatedById: Int
+  warranty_till: Int
+}
+
+input WhereDealerStockSearchInput {
+  batch_number: String
+  company_id: Int
+  createdAt: DateTime
+  createdById: Int
+  dealer_id: Int
+  id: String
+  product_id: Int
+  quantity: Int
+  status: Status
+  updatedAt: DateTime
+  updatedById: Int
 }
 
 input WhereProductCategorySearchInput {
@@ -545,6 +755,20 @@ input WhereProductSubcategorySearchInput {
   status: Status
   updatedAt: DateTime
   updatedById: Int
+}
+
+input WhereSalesSearchInput {
+  company_id: Int
+  createdAt: DateTime
+  createdById: Int
+  customer_id: Int
+  dealer_id: Int
+  id: String
+  product_id: Int
+  sale_date: DateTime
+  updatedAt: DateTime
+  updatedById: Int
+  warranty_till: Int
 }
 
 input WhereUserCompanySearchInput {

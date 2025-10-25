@@ -5,7 +5,7 @@ import { WhereProductCategorySearchInput } from './dto/search-product_category.i
 import { BaseService } from 'src/base/base.service';
 import { Prisma, product_category } from '@prisma/client';
 import { PrismaService } from 'prisma/prisma.service';
-import { DefaultArgs } from 'generated/prisma/runtime/library';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { ProductCategoryPagination } from './product_category.resolver';
 
 @Injectable()
