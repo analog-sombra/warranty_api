@@ -3,6 +3,7 @@ import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 import { Status, Role } from '@prisma/client';
 import { CreateUserCompanyInput } from './create-user_company.input';
 
+
 @InputType()
 export class WhereUserCompanySearchInput extends PartialType(CreateUserCompanyInput) {
     @IsOptional()

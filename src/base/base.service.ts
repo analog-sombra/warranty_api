@@ -56,15 +56,9 @@ export class BaseService<
       if (hasDeletedAt) where.deletedAt = null;
       if (hasDeletedById) where.deletedById = null;
 
-      // Apply search filters from whereSearchInput
-      if (whereSearchInput) {
-        Object.keys(whereSearchInput).forEach((key) => {
-          const value = (whereSearchInput as Record<string, any>)[key];
-          if (value !== undefined && value !== null) {
-            where[key] = value;
-          }
-        });
-      }
+      // Apply search filters from whereSearchInput (including nested)
+      const nestedWhere = this.processWhereSearchInput(whereSearchInput);
+      Object.assign(where, nestedWhere);
 
       const item = await this.delegate.findFirst({
         where,
@@ -79,10 +73,11 @@ export class BaseService<
 
   async getAll(fields: SelectedFields, whereSearchInput: WhereSearchInput) {
     try {
+      // Process nested whereSearchInput
+      const nestedWhere = this.processWhereSearchInput(whereSearchInput);
+      
       const item = await this.delegate.findMany({
-        where: {
-          ...whereSearchInput,
-        },
+        where: nestedWhere,
         select: fields,
       });
       if (item.length === 0) {
@@ -192,9 +187,14 @@ export class BaseService<
         );
       }
 
+      // Prepare update data based on available columns
+      const updateData: Record<string, any> = {};
+      if (hasDeletedAt) updateData.deletedAt = new Date();
+      if (hasDeletedById) updateData.deletedById = userid;
+
       const item = await this.delegate.update({
         where: { id },
-        data: { deletedAt: new Date(), deletedById: userid },
+        data: updateData,
         select: fields,
       });
 
@@ -237,14 +237,9 @@ export class BaseService<
         }
       }
 
-      if (whereSearchInput) {
-        Object.keys(whereSearchInput).forEach((key) => {
-          const value = (whereSearchInput as Record<string, any>)[key];
-          if (value !== undefined && value !== null) {
-            where[key] = value;
-          }
-        });
-      }
+      // Process nested whereSearchInput
+      const nestedWhere = this.processWhereSearchInput(whereSearchInput);
+      Object.assign(where, nestedWhere);
 
       const [data, total] = await Promise.all([
         this.delegate.findMany({
@@ -267,6 +262,26 @@ export class BaseService<
     } catch (error) {
       throw new BadRequestException(`error: ${error}`);
     }
+  }
+
+  private processWhereSearchInput(whereSearchInput: WhereSearchInput): Record<string, any> {
+    const where: Record<string, any> = {};
+    
+    if (whereSearchInput) {
+      Object.keys(whereSearchInput).forEach((key) => {
+        const value = (whereSearchInput as Record<string, any>)[key];
+        if (value !== undefined && value !== null) {
+          // Handle nested objects (like product, subcategory, etc.)
+          if (typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
+            where[key] = this.processWhereSearchInput(value);
+          } else {
+            where[key] = value;
+          }
+        }
+      });
+    }
+    
+    return where;
   }
 
   private async processPasswordFields(

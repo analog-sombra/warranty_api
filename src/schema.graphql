@@ -764,6 +764,7 @@ input WhereSalesSearchInput {
   customer_id: Int
   dealer_id: Int
   id: String
+  product: WhereProductSearchInput
   product_id: Int
   sale_date: DateTime
   updatedAt: DateTime

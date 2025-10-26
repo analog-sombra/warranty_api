@@ -415,6 +415,7 @@ export interface WhereSalesSearchInput {
     customer_id?: Nullable<number>;
     dealer_id?: Nullable<number>;
     id?: Nullable<string>;
+    product?: Nullable<WhereProductSearchInput>;
     product_id?: Nullable<number>;
     sale_date?: Nullable<DateTime>;
     updatedAt?: Nullable<DateTime>;
