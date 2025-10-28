@@ -8,7 +8,6 @@ import { PrismaService } from 'prisma/prisma.service';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { SalesPagination } from './sales.resolver';
 
-
 @Injectable()
 export class SalesService extends BaseService<
   sales,

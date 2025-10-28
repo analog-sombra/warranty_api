@@ -8,7 +8,6 @@ import { BaseService } from 'src/base/base.service';
 import { DefaultArgs } from '@prisma/client/runtime/library';
 import { PrismaService } from 'prisma/prisma.service';
 
-
 @Injectable()
 export class UserCompanyService extends BaseService<
   user_company,

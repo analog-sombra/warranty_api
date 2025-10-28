@@ -10,7 +10,7 @@ import { WhereCitySearchInput } from './dto/search-city.input';
 import { BasePaginated } from 'src/base/entities/base.pagination.entity';
 
 @ObjectType()
-export class CityPagination extends BasePaginated(City) { }
+export class CityPagination extends BasePaginated(City) {}
 
 const BaseCityResolver = createBaseResolver<
   typeof City,

@@ -247,7 +247,13 @@ export class BaseService<
           skip: searchPaginationInput.skip,
           take: searchPaginationInput.take,
           where,
-          select: fields['data']['select'],
+          select:
+            'data' in fields &&
+            typeof fields.data === 'object' &&
+            fields.data !== null &&
+            'select' in fields.data
+              ? (fields.data as { select: SelectedFields }).select
+              : fields,
         }),
         this.delegate.count({
           where,
@@ -267,25 +273,29 @@ export class BaseService<
 
   private processWhereSearchInput(
     whereSearchInput: WhereSearchInput,
-  ): Record<string, any> {
-    const where: Record<string, any> = {};
+  ): Record<string, unknown> {
+    const where: Record<string, unknown> = {};
 
     if (whereSearchInput) {
-      Object.keys(whereSearchInput).forEach((key) => {
-        const value = (whereSearchInput as Record<string, any>)[key];
-        if (value !== undefined && value !== null) {
-          // Handle nested objects (like product, subcategory, etc.)
-          if (
-            typeof value === 'object' &&
-            !Array.isArray(value) &&
-            !(value instanceof Date)
-          ) {
-            where[key] = this.processWhereSearchInput(value);
-          } else {
-            where[key] = value;
+      Object.keys(whereSearchInput as Record<string, unknown>).forEach(
+        (key) => {
+          const value = (whereSearchInput as Record<string, unknown>)[key];
+          if (value !== undefined && value !== null) {
+            // Handle nested objects (like product, subcategory, etc.)
+            if (
+              typeof value === 'object' &&
+              !Array.isArray(value) &&
+              !(value instanceof Date)
+            ) {
+              where[key] = this.processWhereSearchInput(
+                value as WhereSearchInput,
+              );
+            } else {
+              where[key] = value;
+            }
           }
-        }
-      });
+        },
+      );
     }
 
     return where;
