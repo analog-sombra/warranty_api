@@ -38,7 +38,7 @@ export function createBaseResolver<
         PaginationType,
         Delegate
       >,
-    ) { }
+    ) {}
 
     @Query(() => returnType(), { name: `get${name}ById` })
     async getById(
@@ -63,7 +63,7 @@ export function createBaseResolver<
     async getAll(
       @Args('whereSearchInput', { type: whereSearchInputClass })
       whereSearchInput: WhereSearchInput,
-      @Info() info: GraphQLResolveInfo
+      @Info() info: GraphQLResolveInfo,
     ): Promise<Entity[]> {
       const fields: SelectedFields = getSelectedFields(info);
       return await this.service.getAll(fields, whereSearchInput);
@@ -102,12 +102,17 @@ export function createBaseResolver<
     async getPaginated(
       @Args('searchPaginationInput')
       searchPaginationInput: SearchPaginationInput,
-      @Args('whereSearchInput', { type: whereSearchInputClass }) whereSearchInput: WhereSearchInput,
+      @Args('whereSearchInput', { type: whereSearchInputClass })
+      whereSearchInput: WhereSearchInput,
       @Info() info: GraphQLResolveInfo,
     ): Promise<PaginationType> {
       const fields = getSelectedFields(info);
 
-      return await this.service.getPaginated(searchPaginationInput, whereSearchInput, fields);
+      return await this.service.getPaginated(
+        searchPaginationInput,
+        whereSearchInput,
+        fields,
+      );
     }
   }
   return BaseResolver;

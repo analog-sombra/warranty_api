@@ -23,7 +23,7 @@ export class BaseService<
   constructor(
     private readonly modelName: string,
     protected readonly delegate: D,
-  ) { }
+  ) {}
   async getById(id: number, fields: SelectedFields) {
     try {
       const item = await this.delegate.findUnique({
@@ -75,7 +75,7 @@ export class BaseService<
     try {
       // Process nested whereSearchInput
       const nestedWhere = this.processWhereSearchInput(whereSearchInput);
-      
+
       const item = await this.delegate.findMany({
         where: nestedWhere,
         select: fields,
@@ -102,7 +102,6 @@ export class BaseService<
         select: fields,
       });
 
-
       if (!item) {
         throw new BadRequestException(`Could not create ${this.modelName}`);
       }
@@ -122,7 +121,7 @@ export class BaseService<
 
       const hasDeletedAt = 'deletedAt' in firstRecord;
       const hasDeletedById = 'deletedById' in firstRecord;
-      const hasUpdatedById = 'updatedById' in firstRecord;
+      // const hasUpdatedById = 'updatedById' in firstRecord;
 
       const where: Record<string, any> = { id };
       if (hasDeletedAt) where.deletedAt = null;
@@ -142,8 +141,6 @@ export class BaseService<
       const processedUpdate = await this.processPasswordFields(
         update as Record<string, unknown>,
       );
-
-
 
       const item = await this.delegate.update({
         where: { id },
@@ -209,7 +206,11 @@ export class BaseService<
     }
   }
 
-  async getPaginated(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSearchInput, fields: SelectedFields) {
+  async getPaginated(
+    searchPaginationInput: SearchPaginationInput,
+    whereSearchInput: WhereSearchInput,
+    fields: SelectedFields,
+  ) {
     try {
       const sample = await this.delegate.findMany({ take: 1 });
       if (!sample || sample.length === 0) {
@@ -246,7 +247,7 @@ export class BaseService<
           skip: searchPaginationInput.skip,
           take: searchPaginationInput.take,
           where,
-          select: fields["data"]["select"],
+          select: fields['data']['select'],
         }),
         this.delegate.count({
           where,
@@ -264,15 +265,21 @@ export class BaseService<
     }
   }
 
-  private processWhereSearchInput(whereSearchInput: WhereSearchInput): Record<string, any> {
+  private processWhereSearchInput(
+    whereSearchInput: WhereSearchInput,
+  ): Record<string, any> {
     const where: Record<string, any> = {};
-    
+
     if (whereSearchInput) {
       Object.keys(whereSearchInput).forEach((key) => {
         const value = (whereSearchInput as Record<string, any>)[key];
         if (value !== undefined && value !== null) {
           // Handle nested objects (like product, subcategory, etc.)
-          if (typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
+          if (
+            typeof value === 'object' &&
+            !Array.isArray(value) &&
+            !(value instanceof Date)
+          ) {
             where[key] = this.processWhereSearchInput(value);
           } else {
             where[key] = value;
@@ -280,7 +287,7 @@ export class BaseService<
         }
       });
     }
-    
+
     return where;
   }
 
