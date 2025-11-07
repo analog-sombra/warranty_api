@@ -20,6 +20,10 @@ import { UserCompanyModule } from './user_company/user_company.module';
 import { SalesModule } from './sales/sales.module';
 import { DealerSalesModule } from './dealer_sales/dealer_sales.module';
 import { DealerStockModule } from './dealer_stock/dealer_stock.module';
+import { TicketModule } from './ticket/ticket.module';
+import { TicketLevelsModule } from './ticket_levels/ticket_levels.module';
+import { TicketAttachmentsModule } from './ticket_attachments/ticket_attachments.module';
+import { CustomerFeedbackTicketModule } from './customer_feedback_ticket/customer_feedback_ticket.module';
 
 @Module({
   imports: [
@@ -52,6 +56,11 @@ import { DealerStockModule } from './dealer_stock/dealer_stock.module';
     SalesModule,
     DealerSalesModule,
     DealerStockModule,
+    TicketModule,
+    TicketLevelsModule,
+    TicketAttachmentsModule,
+    CustomerFeedbackTicketModule,
+
     // BaseModule,
   ],
   controllers: [AppController],

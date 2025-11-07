@@ -147,7 +147,27 @@ model user {
   user_company_updatedby user_company[] @relation("user_company_updatedby")
   user_company_deletedby user_company[] @relation("user_company_deletedby")
 
+  ticket_createdby ticket[] @relation("ticket_createdby")
+  ticket_updatedby ticket[] @relation("ticket_updatedby")
+  ticket_deletedby ticket[] @relation("ticket_deletedby")
+
+  ticket_levels_createdby ticket_levels[] @relation("ticket_levels_createdby")
+  ticket_levels_updatedby ticket_levels[] @relation("ticket_levels_updatedby")
+  ticket_levels_deletedby ticket_levels[] @relation("ticket_levels_deletedby")
+
+  customer_feedback_ticket_createdby customer_feedback_ticket[] @relation("customer_feedback_ticket_createdby")
+  customer_feedback_ticket_updatedby customer_feedback_ticket[] @relation("customer_feedback_ticket_updatedby")
+  customer_feedback_ticket_deletedby customer_feedback_ticket[] @relation("customer_feedback_ticket_deletedby")
+
+  ticket_attachments_createdby ticket_attachments[] @relation("ticket_attachments_createdby")
+  ticket_attachments_updatedby ticket_attachments[] @relation("ticket_attachments_updatedby")
+  ticket_attachments_deletedby ticket_attachments[] @relation("ticket_attachments_deletedby")
+
+  ticket_levels_assigned_to ticket_levels[] @relation("ticket_levels_assigned_to")
+  ticket_levels_approved_by ticket_levels[] @relation("ticket_levels_approved_by")
+
   user_company user_company[]
+  ticket       ticket[]
 }
 
 model company {
@@ -212,6 +232,7 @@ model product {
   sales          sales[]
   dealer_sales   dealer_sales[]
   dealer_stock   dealer_stock[]
+  ticket         ticket[]
 }
 
 model sales {
@@ -232,6 +253,7 @@ model sales {
   updatedAt     DateTime @updatedAt
   updatedBy     user?    @relation("sales_updatedby", fields: [updatedById], references: [id])
   updatedById   Int?
+  ticket        ticket[]
 }
 
 model dealer_sales {
@@ -308,4 +330,118 @@ model dealer_stock {
   updatedAt    DateTime @updatedAt
   updatedBy    user?    @relation("dealer_stock_updatedby", fields: [updatedById], references: [id])
   updatedById  Int?
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model ticket {
+  id                       Int                        @id @default(autoincrement())
+  resolved_at              DateTime?
+  ticket_number            String                     @unique
+  product                  product                    @relation(fields: [product_id], references: [id])
+  product_id               Int
+  customer                 user                       @relation(fields: [customer_id], references: [id])
+  customer_id              Int
+  sale                     sales                      @relation(fields: [sale_id], references: [id])
+  sale_id                  Int
+  issue_description        String                     @db.LongText
+  issue_category           String
+  preferred_contact_time   String
+  diagnostic_notes         String?                    @db.LongText
+  resolution_notes         String?                    @db.LongText
+  priority                 Priority                   @default(LOW)
+  status                   TicketStatus               @default(OPEN)
+  createdAt                DateTime                   @default(now())
+  createdBy                user                       @relation("ticket_createdby", fields: [createdById], references: [id])
+  createdById              Int
+  updatedAt                DateTime                   @updatedAt
+  updatedBy                user?                      @relation("ticket_updatedby", fields: [updatedById], references: [id])
+  updatedById              Int?
+  deletedAt                DateTime?
+  deletedBy                user?                      @relation("ticket_deletedby", fields: [deletedById], references: [id])
+  deletedById              Int?
+  ticket_attachments       ticket_attachments[]
+  customer_feedback_ticket customer_feedback_ticket[]
+  ticket_levels            ticket_levels[]
+}
+
+model ticket_levels {
+  id                Int       @id @default(autoincrement())
+  ticket            ticket    @relation(fields: [ticket_id], references: [id])
+  ticket_id         Int
+  level             Int
+  assigned_to       user      @relation("ticket_levels_assigned_to", fields: [assigned_to_id], references: [id])
+  assigned_to_id    Int
+  diagnostic_notes  String?   @db.LongText
+  resolution_notes  String?   @db.LongText
+  approval_required Boolean   @default(false)
+  approval_notes    String?   @db.LongText
+  approved_by       user?     @relation("ticket_levels_approved_by", fields: [approved_by_id], references: [id])
+  approved_by_id    Int?
+  status            Status    @default(ACTIVE)
+  createdAt         DateTime  @default(now())
+  createdBy         user      @relation("ticket_levels_createdby", fields: [createdById], references: [id])
+  createdById       Int
+  updatedAt         DateTime  @updatedAt
+  updatedBy         user?     @relation("ticket_levels_updatedby", fields: [updatedById], references: [id])
+  updatedById       Int?
+  deletedAt         DateTime?
+  deletedBy         user?     @relation("ticket_levels_deletedby", fields: [deletedById], references: [id])
+  deletedById       Int?
+}
+
+model customer_feedback_ticket {
+  id          Int       @id @default(autoincrement())
+  ticket      ticket    @relation(fields: [ticket_id], references: [id])
+  ticket_id   Int
+  rating      Int
+  comments    String?   @db.LongText
+  status      Status    @default(ACTIVE)
+  createdAt   DateTime  @default(now())
+  createdBy   user      @relation("customer_feedback_ticket_createdby", fields: [createdById], references: [id])
+  createdById Int
+  updatedAt   DateTime  @updatedAt
+  updatedBy   user?     @relation("customer_feedback_ticket_updatedby", fields: [updatedById], references: [id])
+  updatedById Int?
+  deletedAt   DateTime?
+  deletedBy   user?     @relation("customer_feedback_ticket_deletedby", fields: [deletedById], references: [id])
+  deletedById Int?
+}
+
+enum TicketType {
+  IMAGE
+  DOCUMENT
+  VIDEO
+  INVOICE
+  OTHER
+}
+
+model ticket_attachments {
+  id          Int        @id @default(autoincrement())
+  ticket      ticket     @relation(fields: [ticket_id], references: [id])
+  ticket_id   Int
+  file_path   String
+  type        TicketType @default(IMAGE)
+  status      Status     @default(ACTIVE)
+  createdAt   DateTime   @default(now())
+  createdBy   user       @relation("ticket_attachments_createdby", fields: [createdById], references: [id])
+  createdById Int
+  updatedAt   DateTime   @updatedAt
+  updatedBy   user?      @relation("ticket_attachments_updatedby", fields: [updatedById], references: [id])
+  updatedById Int?
+  deletedAt   DateTime?
+  deletedBy   user?      @relation("ticket_attachments_deletedby", fields: [deletedById], references: [id])
+  deletedById Int?
 }

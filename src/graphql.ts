@@ -8,6 +8,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export enum Priority {
+    HIGH = "HIGH",
+    LOW = "LOW",
+    MEDIUM = "MEDIUM",
+    URGENT = "URGENT"
+}
+
 export enum Role {
     ACCOUNTS = "ACCOUNTS",
     ADMIN = "ADMIN",
@@ -31,6 +38,13 @@ export enum Status {
     INACTIVE = "INACTIVE"
 }
 
+export enum TicketStatus {
+    CLOSED = "CLOSED",
+    IN_PROGRESS = "IN_PROGRESS",
+    OPEN = "OPEN",
+    RESOLVED = "RESOLVED"
+}
+
 export interface CreateCityInput {
     name: string;
 }
@@ -52,6 +66,13 @@ export interface CreateCompanyInput {
     status?: Nullable<Status>;
     website?: Nullable<string>;
     zone_id: number;
+}
+
+export interface CreateCustomerFeedbackTicketInput {
+    comments?: Nullable<string>;
+    createdById: number;
+    rating: number;
+    ticket_id: number;
 }
 
 export interface CreateDealerSalesInput {
@@ -111,6 +132,40 @@ export interface CreateSalesInput {
     dealer_id: number;
     product_id: number;
     warranty_till: number;
+}
+
+export interface CreateTicketAttachmentsInput {
+    createdById: number;
+    file_path: string;
+    ticket_id: number;
+    type?: Nullable<string>;
+}
+
+export interface CreateTicketInput {
+    createdById: number;
+    customer_id: number;
+    diagnostic_notes?: Nullable<string>;
+    issue_category: string;
+    issue_description: string;
+    preferred_contact_time: string;
+    priority?: Nullable<Priority>;
+    product_id: number;
+    resolution_notes?: Nullable<string>;
+    sale_id: number;
+    status?: Nullable<TicketStatus>;
+    ticket_number: string;
+}
+
+export interface CreateTicketLevelsInput {
+    approval_notes?: Nullable<string>;
+    approval_required: boolean;
+    approved_by_id?: Nullable<number>;
+    assigned_to_id: number;
+    createdById: number;
+    diagnostic_notes?: Nullable<string>;
+    level: number;
+    resolution_notes?: Nullable<string>;
+    ticket_id: number;
 }
 
 export interface CreateUserCompanyInput {
@@ -186,6 +241,14 @@ export interface UpdateCompanyInput {
     updatedById?: Nullable<number>;
     website?: Nullable<string>;
     zone_id?: Nullable<number>;
+}
+
+export interface UpdateCustomerFeedbackTicketInput {
+    comments?: Nullable<string>;
+    createdById?: Nullable<number>;
+    rating?: Nullable<number>;
+    ticket_id?: Nullable<number>;
+    updatedById?: Nullable<number>;
 }
 
 export interface UpdateDealerSalesInput {
@@ -265,6 +328,44 @@ export interface UpdateSalesInput {
     warranty_till?: Nullable<number>;
 }
 
+export interface UpdateTicketAttachmentsInput {
+    createdById?: Nullable<number>;
+    file_path?: Nullable<string>;
+    ticket_id?: Nullable<number>;
+    type?: Nullable<string>;
+    updatedById?: Nullable<number>;
+}
+
+export interface UpdateTicketInput {
+    createdById?: Nullable<number>;
+    customer_id?: Nullable<number>;
+    diagnostic_notes?: Nullable<string>;
+    issue_category?: Nullable<string>;
+    issue_description?: Nullable<string>;
+    preferred_contact_time?: Nullable<string>;
+    priority?: Nullable<Priority>;
+    product_id?: Nullable<number>;
+    resolution_notes?: Nullable<string>;
+    resolved_at?: Nullable<DateTime>;
+    sale_id?: Nullable<number>;
+    status?: Nullable<TicketStatus>;
+    ticket_number?: Nullable<string>;
+    updatedById?: Nullable<number>;
+}
+
+export interface UpdateTicketLevelsInput {
+    approval_notes?: Nullable<string>;
+    approval_required?: Nullable<boolean>;
+    approved_by_id?: Nullable<number>;
+    assigned_to_id?: Nullable<number>;
+    createdById?: Nullable<number>;
+    diagnostic_notes?: Nullable<string>;
+    level?: Nullable<number>;
+    resolution_notes?: Nullable<string>;
+    ticket_id?: Nullable<number>;
+    updatedById?: Nullable<number>;
+}
+
 export interface UpdateUserCompanyInput {
     company_id: number;
     createdById?: Nullable<number>;
@@ -330,6 +431,18 @@ export interface WhereCompanySearchInput {
     updatedById?: Nullable<number>;
     website?: Nullable<string>;
     zone_id?: Nullable<number>;
+}
+
+export interface WhereCustomerFeedbackTicketSearchInput {
+    comments?: Nullable<string>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    id?: Nullable<string>;
+    rating?: Nullable<number>;
+    status?: Nullable<string>;
+    ticket_id?: Nullable<number>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
 }
 
 export interface WhereDealerSalesSearchInput {
@@ -423,6 +536,55 @@ export interface WhereSalesSearchInput {
     warranty_till?: Nullable<number>;
 }
 
+export interface WhereTicketAttachmentsSearchInput {
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    file_path?: Nullable<string>;
+    id?: Nullable<string>;
+    status?: Nullable<string>;
+    ticket_id?: Nullable<number>;
+    type?: Nullable<string>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+}
+
+export interface WhereTicketLevelsSearchInput {
+    approval_notes?: Nullable<string>;
+    approval_required?: Nullable<boolean>;
+    approved_by_id?: Nullable<number>;
+    assigned_to_id?: Nullable<number>;
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    diagnostic_notes?: Nullable<string>;
+    id?: Nullable<string>;
+    level?: Nullable<number>;
+    resolution_notes?: Nullable<string>;
+    status?: Nullable<string>;
+    ticket_id?: Nullable<number>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+}
+
+export interface WhereTicketSearchInput {
+    createdAt?: Nullable<DateTime>;
+    createdById?: Nullable<number>;
+    customer_id?: Nullable<number>;
+    diagnostic_notes?: Nullable<string>;
+    id?: Nullable<string>;
+    issue_category?: Nullable<string>;
+    issue_description?: Nullable<string>;
+    preferred_contact_time?: Nullable<string>;
+    priority?: Nullable<Priority>;
+    product_id?: Nullable<number>;
+    resolution_notes?: Nullable<string>;
+    sale?: Nullable<WhereSalesSearchInput>;
+    sale_id?: Nullable<number>;
+    status?: Nullable<TicketStatus>;
+    ticket_number?: Nullable<string>;
+    updatedAt?: Nullable<DateTime>;
+    updatedById?: Nullable<number>;
+}
+
 export interface WhereUserCompanySearchInput {
     company_id?: Nullable<number>;
     createdAt?: Nullable<DateTime>;
@@ -507,6 +669,31 @@ export interface CompanyPagination {
     total: number;
 }
 
+export interface CustomerFeedbackTicket {
+    comments?: Nullable<string>;
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    deletedAt?: Nullable<DateTime>;
+    deletedBy?: Nullable<User>;
+    deletedById?: Nullable<number>;
+    id: number;
+    rating: number;
+    status: Status;
+    ticket: Ticket;
+    ticket_id: number;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+}
+
+export interface CustomerFeedbackTicketPagination {
+    data: CustomerFeedbackTicket[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
 export interface DealerSales {
     batch_number: string;
     company: Company;
@@ -563,23 +750,31 @@ export interface DealerStockPagination {
 export interface IMutation {
     createCity(inputType: CreateCityInput): City | Promise<City>;
     createCompany(inputType: CreateCompanyInput): Company | Promise<Company>;
+    createCustomerFeedbackTicket(inputType: CreateCustomerFeedbackTicketInput): CustomerFeedbackTicket | Promise<CustomerFeedbackTicket>;
     createDealerSales(inputType: CreateDealerSalesInput): DealerSales | Promise<DealerSales>;
     createDealerStock(inputType: CreateDealerStockInput): DealerStock | Promise<DealerStock>;
     createProduct(inputType: CreateProductInput): Product | Promise<Product>;
     createProductCategory(inputType: CreateProductCategoryInput): ProductCategory | Promise<ProductCategory>;
     createProductSubcategory(inputType: CreateProductSubcategoryInput): ProductSubcategory | Promise<ProductSubcategory>;
     createSales(inputType: CreateSalesInput): Sales | Promise<Sales>;
+    createTicket(inputType: CreateTicketInput): Ticket | Promise<Ticket>;
+    createTicketAttachments(inputType: CreateTicketAttachmentsInput): TicketAttachments | Promise<TicketAttachments>;
+    createTicketLevels(inputType: CreateTicketLevelsInput): TicketLevels | Promise<TicketLevels>;
     createUser(inputType: CreateUserInput): User | Promise<User>;
     createUserCompany(inputType: CreateUserCompanyInput): UserCompany | Promise<UserCompany>;
     createZone(inputType: CreateZoneInput): Zone | Promise<Zone>;
     deleteCity(id: number, userid: number): City | Promise<City>;
     deleteCompany(id: number, userid: number): Company | Promise<Company>;
+    deleteCustomerFeedbackTicket(id: number, userid: number): CustomerFeedbackTicket | Promise<CustomerFeedbackTicket>;
     deleteDealerSales(id: number, userid: number): DealerSales | Promise<DealerSales>;
     deleteDealerStock(id: number, userid: number): DealerStock | Promise<DealerStock>;
     deleteProduct(id: number, userid: number): Product | Promise<Product>;
     deleteProductCategory(id: number, userid: number): ProductCategory | Promise<ProductCategory>;
     deleteProductSubcategory(id: number, userid: number): ProductSubcategory | Promise<ProductSubcategory>;
     deleteSales(id: number, userid: number): Sales | Promise<Sales>;
+    deleteTicket(id: number, userid: number): Ticket | Promise<Ticket>;
+    deleteTicketAttachments(id: number, userid: number): TicketAttachments | Promise<TicketAttachments>;
+    deleteTicketLevels(id: number, userid: number): TicketLevels | Promise<TicketLevels>;
     deleteUser(id: number, userid: number): User | Promise<User>;
     deleteUserCompany(id: number, userid: number): UserCompany | Promise<UserCompany>;
     deleteZone(id: number, userid: number): Zone | Promise<Zone>;
@@ -587,12 +782,16 @@ export interface IMutation {
     signup(signUpUserInput: SignUpUserInput): User | Promise<User>;
     updateCity(id: number, updateType: UpdateCityInput): City | Promise<City>;
     updateCompany(id: number, updateType: UpdateCompanyInput): Company | Promise<Company>;
+    updateCustomerFeedbackTicket(id: number, updateType: UpdateCustomerFeedbackTicketInput): CustomerFeedbackTicket | Promise<CustomerFeedbackTicket>;
     updateDealerSales(id: number, updateType: UpdateDealerSalesInput): DealerSales | Promise<DealerSales>;
     updateDealerStock(id: number, updateType: UpdateDealerStockInput): DealerStock | Promise<DealerStock>;
     updateProduct(id: number, updateType: UpdateProductInput): Product | Promise<Product>;
     updateProductCategory(id: number, updateType: UpdateProductCategoryInput): ProductCategory | Promise<ProductCategory>;
     updateProductSubcategory(id: number, updateType: UpdateProductSubcategoryInput): ProductSubcategory | Promise<ProductSubcategory>;
     updateSales(id: number, updateType: UpdateSalesInput): Sales | Promise<Sales>;
+    updateTicket(id: number, updateType: UpdateTicketInput): Ticket | Promise<Ticket>;
+    updateTicketAttachments(id: number, updateType: UpdateTicketAttachmentsInput): TicketAttachments | Promise<TicketAttachments>;
+    updateTicketLevels(id: number, updateType: UpdateTicketLevelsInput): TicketLevels | Promise<TicketLevels>;
     updateUser(id: number, updateType: UpdateUserInput): User | Promise<User>;
     updateUserCompany(id: number, updateType: UpdateUserCompanyInput): UserCompany | Promise<UserCompany>;
     updateZone(id: number, updateType: UpdateZoneInput): Zone | Promise<Zone>;
@@ -682,27 +881,36 @@ export interface ProductSubcategoryPagination {
 export interface IQuery {
     getAllCity(whereSearchInput: WhereCitySearchInput): City[] | Promise<City[]>;
     getAllCompany(whereSearchInput: WhereCompanySearchInput): Company[] | Promise<Company[]>;
+    getAllCustomerFeedbackTicket(whereSearchInput: WhereCustomerFeedbackTicketSearchInput): CustomerFeedbackTicket[] | Promise<CustomerFeedbackTicket[]>;
     getAllDealerSales(whereSearchInput: WhereDealerSalesSearchInput): DealerSales[] | Promise<DealerSales[]>;
     getAllDealerStock(whereSearchInput: WhereDealerStockSearchInput): DealerStock[] | Promise<DealerStock[]>;
     getAllProduct(whereSearchInput: WhereProductSearchInput): Product[] | Promise<Product[]>;
     getAllProductCategory(whereSearchInput: WhereProductCategorySearchInput): ProductCategory[] | Promise<ProductCategory[]>;
     getAllProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput): ProductSubcategory[] | Promise<ProductSubcategory[]>;
     getAllSales(whereSearchInput: WhereSalesSearchInput): Sales[] | Promise<Sales[]>;
+    getAllTicket(whereSearchInput: WhereTicketSearchInput): Ticket[] | Promise<Ticket[]>;
+    getAllTicketAttachments(whereSearchInput: WhereTicketAttachmentsSearchInput): TicketAttachments[] | Promise<TicketAttachments[]>;
+    getAllTicketLevels(whereSearchInput: WhereTicketLevelsSearchInput): TicketLevels[] | Promise<TicketLevels[]>;
     getAllUser(whereSearchInput: WhereUserSearchInput): User[] | Promise<User[]>;
     getAllUserCompany(whereSearchInput: WhereUserCompanySearchInput): UserCompany[] | Promise<UserCompany[]>;
     getAllZone(whereSearchInput: WhereZoneSearchInput): Zone[] | Promise<Zone[]>;
     getCityById(id: number): City | Promise<City>;
     getCompanyById(id: number): Company | Promise<Company>;
+    getCustomerFeedbackTicketById(id: number): CustomerFeedbackTicket | Promise<CustomerFeedbackTicket>;
     getDealerSalesById(id: number): DealerSales | Promise<DealerSales>;
     getDealerStockById(id: number): DealerStock | Promise<DealerStock>;
     getPaginatedCity(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCitySearchInput): CityPagination | Promise<CityPagination>;
     getPaginatedCompany(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCompanySearchInput): CompanyPagination | Promise<CompanyPagination>;
+    getPaginatedCustomerFeedbackTicket(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereCustomerFeedbackTicketSearchInput): CustomerFeedbackTicketPagination | Promise<CustomerFeedbackTicketPagination>;
     getPaginatedDealerSales(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDealerSalesSearchInput): DealerSalesPagination | Promise<DealerSalesPagination>;
     getPaginatedDealerStock(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereDealerStockSearchInput): DealerStockPagination | Promise<DealerStockPagination>;
     getPaginatedProduct(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductSearchInput): ProductPagination | Promise<ProductPagination>;
     getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductCategorySearchInput): ProductCategoryPagination | Promise<ProductCategoryPagination>;
     getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereProductSubcategorySearchInput): ProductSubcategoryPagination | Promise<ProductSubcategoryPagination>;
     getPaginatedSales(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereSalesSearchInput): SalesPagination | Promise<SalesPagination>;
+    getPaginatedTicket(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereTicketSearchInput): TicketPagination | Promise<TicketPagination>;
+    getPaginatedTicketAttachments(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereTicketAttachmentsSearchInput): TicketAttachmentsPagination | Promise<TicketAttachmentsPagination>;
+    getPaginatedTicketLevels(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereTicketLevelsSearchInput): TicketLevelsPagination | Promise<TicketLevelsPagination>;
     getPaginatedUser(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserSearchInput): UserPagination | Promise<UserPagination>;
     getPaginatedUserCompany(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereUserCompanySearchInput): UserCompanyPagination | Promise<UserCompanyPagination>;
     getPaginatedZone(searchPaginationInput: SearchPaginationInput, whereSearchInput: WhereZoneSearchInput): ZonePagination | Promise<ZonePagination>;
@@ -710,18 +918,25 @@ export interface IQuery {
     getProductCategoryById(id: number): ProductCategory | Promise<ProductCategory>;
     getProductSubcategoryById(id: number): ProductSubcategory | Promise<ProductSubcategory>;
     getSalesById(id: number): Sales | Promise<Sales>;
+    getTicketAttachmentsById(id: number): TicketAttachments | Promise<TicketAttachments>;
+    getTicketById(id: number): Ticket | Promise<Ticket>;
+    getTicketLevelsById(id: number): TicketLevels | Promise<TicketLevels>;
     getUserById(id: number): User | Promise<User>;
     getUserCompanyById(id: number): UserCompany | Promise<UserCompany>;
     getZoneById(id: number): Zone | Promise<Zone>;
     login(loginUserInput: LoginUserInput): User | Promise<User>;
     searchCity(whereSearchInput: WhereCitySearchInput): Nullable<City> | Promise<Nullable<City>>;
     searchCompany(whereSearchInput: WhereCompanySearchInput): Nullable<Company> | Promise<Nullable<Company>>;
+    searchCustomerFeedbackTicket(whereSearchInput: WhereCustomerFeedbackTicketSearchInput): Nullable<CustomerFeedbackTicket> | Promise<Nullable<CustomerFeedbackTicket>>;
     searchDealerSales(whereSearchInput: WhereDealerSalesSearchInput): Nullable<DealerSales> | Promise<Nullable<DealerSales>>;
     searchDealerStock(whereSearchInput: WhereDealerStockSearchInput): Nullable<DealerStock> | Promise<Nullable<DealerStock>>;
     searchProduct(whereSearchInput: WhereProductSearchInput): Nullable<Product> | Promise<Nullable<Product>>;
     searchProductCategory(whereSearchInput: WhereProductCategorySearchInput): Nullable<ProductCategory> | Promise<Nullable<ProductCategory>>;
     searchProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput): Nullable<ProductSubcategory> | Promise<Nullable<ProductSubcategory>>;
     searchSales(whereSearchInput: WhereSalesSearchInput): Nullable<Sales> | Promise<Nullable<Sales>>;
+    searchTicket(whereSearchInput: WhereTicketSearchInput): Nullable<Ticket> | Promise<Nullable<Ticket>>;
+    searchTicketAttachments(whereSearchInput: WhereTicketAttachmentsSearchInput): Nullable<TicketAttachments> | Promise<Nullable<TicketAttachments>>;
+    searchTicketLevels(whereSearchInput: WhereTicketLevelsSearchInput): Nullable<TicketLevels> | Promise<Nullable<TicketLevels>>;
     searchUser(whereSearchInput: WhereUserSearchInput): Nullable<User> | Promise<Nullable<User>>;
     searchUserCompany(whereSearchInput: WhereUserCompanySearchInput): Nullable<UserCompany> | Promise<Nullable<UserCompany>>;
     searchZone(whereSearchInput: WhereZoneSearchInput): Nullable<Zone> | Promise<Nullable<Zone>>;
@@ -749,6 +964,98 @@ export interface Sales {
 
 export interface SalesPagination {
     data: Sales[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
+export interface Ticket {
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    customer: User;
+    customer_id: number;
+    deletedAt?: Nullable<DateTime>;
+    deletedBy?: Nullable<User>;
+    deletedById?: Nullable<number>;
+    diagnostic_notes?: Nullable<string>;
+    id: number;
+    issue_category: string;
+    issue_description: string;
+    preferred_contact_time: string;
+    priority: string;
+    product: Product;
+    product_id: number;
+    resolution_notes?: Nullable<string>;
+    resolved_at?: Nullable<DateTime>;
+    sale: Sales;
+    sale_id: number;
+    status: string;
+    ticket_number: string;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+}
+
+export interface TicketAttachments {
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    deletedAt?: Nullable<DateTime>;
+    deletedBy?: Nullable<User>;
+    deletedById?: Nullable<number>;
+    file_path: string;
+    id: number;
+    status: string;
+    ticket: Ticket;
+    ticket_id: number;
+    type: string;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+}
+
+export interface TicketAttachmentsPagination {
+    data: TicketAttachments[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
+export interface TicketLevels {
+    approval_notes?: Nullable<string>;
+    approval_required: boolean;
+    approved_by?: Nullable<User>;
+    approved_by_id?: Nullable<number>;
+    assigned_to: User;
+    assigned_to_id: number;
+    createdAt: DateTime;
+    createdBy: User;
+    createdById: number;
+    deletedAt?: Nullable<DateTime>;
+    deletedBy?: Nullable<User>;
+    deletedById?: Nullable<number>;
+    diagnostic_notes?: Nullable<string>;
+    id: number;
+    level: number;
+    resolution_notes?: Nullable<string>;
+    status: Status;
+    ticket: Ticket;
+    ticket_id: number;
+    updatedAt: DateTime;
+    updatedBy?: Nullable<User>;
+    updatedById?: Nullable<number>;
+}
+
+export interface TicketLevelsPagination {
+    data: TicketLevels[];
+    skip: number;
+    take: number;
+    total: number;
+}
+
+export interface TicketPagination {
+    data: Ticket[];
     skip: number;
     take: number;
     total: number;

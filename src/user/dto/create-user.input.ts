@@ -3,7 +3,6 @@ import { Role, Status } from '@prisma/client';
 import {
   IsBoolean,
   IsEnum,
-  IsInt,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -99,5 +98,4 @@ export class CreateUserInput {
     nullable: true,
   })
   status: Status;
-
 }

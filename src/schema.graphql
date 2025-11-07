@@ -68,6 +68,13 @@ input CreateCompanyInput {
   zone_id: Int!
 }
 
+input CreateCustomerFeedbackTicketInput {
+  comments: String
+  createdById: Int!
+  rating: Int!
+  ticket_id: Int!
+}
+
 input CreateDealerSalesInput {
   batch_number: String!
   company_id: Int!
@@ -127,6 +134,40 @@ input CreateSalesInput {
   warranty_till: Int!
 }
 
+input CreateTicketAttachmentsInput {
+  createdById: Int!
+  file_path: String!
+  ticket_id: Int!
+  type: String
+}
+
+input CreateTicketInput {
+  createdById: Int!
+  customer_id: Int!
+  diagnostic_notes: String
+  issue_category: String!
+  issue_description: String!
+  preferred_contact_time: String!
+  priority: Priority
+  product_id: Int!
+  resolution_notes: String
+  sale_id: Int!
+  status: TicketStatus
+  ticket_number: String!
+}
+
+input CreateTicketLevelsInput {
+  approval_notes: String
+  approval_required: Boolean! = false
+  approved_by_id: Int
+  assigned_to_id: Int!
+  createdById: Int!
+  diagnostic_notes: String
+  level: Int!
+  resolution_notes: String
+  ticket_id: Int!
+}
+
 input CreateUserCompanyInput {
   company_id: Int!
   createdById: Int!
@@ -154,6 +195,31 @@ input CreateUserInput {
 input CreateZoneInput {
   city_id: Int!
   name: String!
+}
+
+type CustomerFeedbackTicket {
+  comments: String
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  id: Int!
+  rating: Int!
+  status: Status!
+  ticket: Ticket!
+  ticket_id: Int!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type CustomerFeedbackTicketPagination {
+  data: [CustomerFeedbackTicket!]!
+  skip: Int!
+  take: Int!
+  total: Int!
 }
 
 """
@@ -222,23 +288,31 @@ input LoginUserInput {
 type Mutation {
   createCity(inputType: CreateCityInput!): City!
   createCompany(inputType: CreateCompanyInput!): Company!
+  createCustomerFeedbackTicket(inputType: CreateCustomerFeedbackTicketInput!): CustomerFeedbackTicket!
   createDealerSales(inputType: CreateDealerSalesInput!): DealerSales!
   createDealerStock(inputType: CreateDealerStockInput!): DealerStock!
   createProduct(inputType: CreateProductInput!): Product!
   createProductCategory(inputType: CreateProductCategoryInput!): ProductCategory!
   createProductSubcategory(inputType: CreateProductSubcategoryInput!): ProductSubcategory!
   createSales(inputType: CreateSalesInput!): Sales!
+  createTicket(inputType: CreateTicketInput!): Ticket!
+  createTicketAttachments(inputType: CreateTicketAttachmentsInput!): TicketAttachments!
+  createTicketLevels(inputType: CreateTicketLevelsInput!): TicketLevels!
   createUser(inputType: CreateUserInput!): User!
   createUserCompany(inputType: CreateUserCompanyInput!): UserCompany!
   createZone(inputType: CreateZoneInput!): Zone!
   deleteCity(id: Int!, userid: Int!): City!
   deleteCompany(id: Int!, userid: Int!): Company!
+  deleteCustomerFeedbackTicket(id: Int!, userid: Int!): CustomerFeedbackTicket!
   deleteDealerSales(id: Int!, userid: Int!): DealerSales!
   deleteDealerStock(id: Int!, userid: Int!): DealerStock!
   deleteProduct(id: Int!, userid: Int!): Product!
   deleteProductCategory(id: Int!, userid: Int!): ProductCategory!
   deleteProductSubcategory(id: Int!, userid: Int!): ProductSubcategory!
   deleteSales(id: Int!, userid: Int!): Sales!
+  deleteTicket(id: Int!, userid: Int!): Ticket!
+  deleteTicketAttachments(id: Int!, userid: Int!): TicketAttachments!
+  deleteTicketLevels(id: Int!, userid: Int!): TicketLevels!
   deleteUser(id: Int!, userid: Int!): User!
   deleteUserCompany(id: Int!, userid: Int!): UserCompany!
   deleteZone(id: Int!, userid: Int!): Zone!
@@ -246,16 +320,28 @@ type Mutation {
   signup(signUpUserInput: SignUpUserInput!): User!
   updateCity(id: Int!, updateType: UpdateCityInput!): City!
   updateCompany(id: Int!, updateType: UpdateCompanyInput!): Company!
+  updateCustomerFeedbackTicket(id: Int!, updateType: UpdateCustomerFeedbackTicketInput!): CustomerFeedbackTicket!
   updateDealerSales(id: Int!, updateType: UpdateDealerSalesInput!): DealerSales!
   updateDealerStock(id: Int!, updateType: UpdateDealerStockInput!): DealerStock!
   updateProduct(id: Int!, updateType: UpdateProductInput!): Product!
   updateProductCategory(id: Int!, updateType: UpdateProductCategoryInput!): ProductCategory!
   updateProductSubcategory(id: Int!, updateType: UpdateProductSubcategoryInput!): ProductSubcategory!
   updateSales(id: Int!, updateType: UpdateSalesInput!): Sales!
+  updateTicket(id: Int!, updateType: UpdateTicketInput!): Ticket!
+  updateTicketAttachments(id: Int!, updateType: UpdateTicketAttachmentsInput!): TicketAttachments!
+  updateTicketLevels(id: Int!, updateType: UpdateTicketLevelsInput!): TicketLevels!
   updateUser(id: Int!, updateType: UpdateUserInput!): User!
   updateUserCompany(id: Int!, updateType: UpdateUserCompanyInput!): UserCompany!
   updateZone(id: Int!, updateType: UpdateZoneInput!): Zone!
   verifyOtp(contact: String!, otp: String!): User!
+}
+
+"""Priority levels for tickets"""
+enum Priority {
+  HIGH
+  LOW
+  MEDIUM
+  URGENT
 }
 
 type Product {
@@ -341,27 +427,36 @@ type ProductSubcategoryPagination {
 type Query {
   getAllCity(whereSearchInput: WhereCitySearchInput!): [City!]!
   getAllCompany(whereSearchInput: WhereCompanySearchInput!): [Company!]!
+  getAllCustomerFeedbackTicket(whereSearchInput: WhereCustomerFeedbackTicketSearchInput!): [CustomerFeedbackTicket!]!
   getAllDealerSales(whereSearchInput: WhereDealerSalesSearchInput!): [DealerSales!]!
   getAllDealerStock(whereSearchInput: WhereDealerStockSearchInput!): [DealerStock!]!
   getAllProduct(whereSearchInput: WhereProductSearchInput!): [Product!]!
   getAllProductCategory(whereSearchInput: WhereProductCategorySearchInput!): [ProductCategory!]!
   getAllProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput!): [ProductSubcategory!]!
   getAllSales(whereSearchInput: WhereSalesSearchInput!): [Sales!]!
+  getAllTicket(whereSearchInput: WhereTicketSearchInput!): [Ticket!]!
+  getAllTicketAttachments(whereSearchInput: WhereTicketAttachmentsSearchInput!): [TicketAttachments!]!
+  getAllTicketLevels(whereSearchInput: WhereTicketLevelsSearchInput!): [TicketLevels!]!
   getAllUser(whereSearchInput: WhereUserSearchInput!): [User!]!
   getAllUserCompany(whereSearchInput: WhereUserCompanySearchInput!): [UserCompany!]!
   getAllZone(whereSearchInput: WhereZoneSearchInput!): [Zone!]!
   getCityById(id: Int!): City!
   getCompanyById(id: Int!): Company!
+  getCustomerFeedbackTicketById(id: Int!): CustomerFeedbackTicket!
   getDealerSalesById(id: Int!): DealerSales!
   getDealerStockById(id: Int!): DealerStock!
   getPaginatedCity(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCitySearchInput!): CityPagination!
   getPaginatedCompany(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCompanySearchInput!): CompanyPagination!
+  getPaginatedCustomerFeedbackTicket(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereCustomerFeedbackTicketSearchInput!): CustomerFeedbackTicketPagination!
   getPaginatedDealerSales(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDealerSalesSearchInput!): DealerSalesPagination!
   getPaginatedDealerStock(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereDealerStockSearchInput!): DealerStockPagination!
   getPaginatedProduct(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductSearchInput!): ProductPagination!
   getPaginatedProductCategory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductCategorySearchInput!): ProductCategoryPagination!
   getPaginatedProductSubcategory(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereProductSubcategorySearchInput!): ProductSubcategoryPagination!
   getPaginatedSales(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereSalesSearchInput!): SalesPagination!
+  getPaginatedTicket(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereTicketSearchInput!): TicketPagination!
+  getPaginatedTicketAttachments(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereTicketAttachmentsSearchInput!): TicketAttachmentsPagination!
+  getPaginatedTicketLevels(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereTicketLevelsSearchInput!): TicketLevelsPagination!
   getPaginatedUser(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserSearchInput!): UserPagination!
   getPaginatedUserCompany(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereUserCompanySearchInput!): UserCompanyPagination!
   getPaginatedZone(searchPaginationInput: SearchPaginationInput!, whereSearchInput: WhereZoneSearchInput!): ZonePagination!
@@ -369,18 +464,25 @@ type Query {
   getProductCategoryById(id: Int!): ProductCategory!
   getProductSubcategoryById(id: Int!): ProductSubcategory!
   getSalesById(id: Int!): Sales!
+  getTicketAttachmentsById(id: Int!): TicketAttachments!
+  getTicketById(id: Int!): Ticket!
+  getTicketLevelsById(id: Int!): TicketLevels!
   getUserById(id: Int!): User!
   getUserCompanyById(id: Int!): UserCompany!
   getZoneById(id: Int!): Zone!
   login(loginUserInput: LoginUserInput!): User!
   searchCity(whereSearchInput: WhereCitySearchInput!): City
   searchCompany(whereSearchInput: WhereCompanySearchInput!): Company
+  searchCustomerFeedbackTicket(whereSearchInput: WhereCustomerFeedbackTicketSearchInput!): CustomerFeedbackTicket
   searchDealerSales(whereSearchInput: WhereDealerSalesSearchInput!): DealerSales
   searchDealerStock(whereSearchInput: WhereDealerStockSearchInput!): DealerStock
   searchProduct(whereSearchInput: WhereProductSearchInput!): Product
   searchProductCategory(whereSearchInput: WhereProductCategorySearchInput!): ProductCategory
   searchProductSubcategory(whereSearchInput: WhereProductSubcategorySearchInput!): ProductSubcategory
   searchSales(whereSearchInput: WhereSalesSearchInput!): Sales
+  searchTicket(whereSearchInput: WhereTicketSearchInput!): Ticket
+  searchTicketAttachments(whereSearchInput: WhereTicketAttachmentsSearchInput!): TicketAttachments
+  searchTicketLevels(whereSearchInput: WhereTicketLevelsSearchInput!): TicketLevels
   searchUser(whereSearchInput: WhereUserSearchInput!): User
   searchUserCompany(whereSearchInput: WhereUserCompanySearchInput!): UserCompany
   searchZone(whereSearchInput: WhereZoneSearchInput!): Zone
@@ -448,6 +550,105 @@ enum Status {
   INACTIVE
 }
 
+type Ticket {
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  customer: User!
+  customer_id: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  diagnostic_notes: String
+  id: Int!
+  issue_category: String!
+  issue_description: String!
+  preferred_contact_time: String!
+  priority: String!
+  product: Product!
+  product_id: Int!
+  resolution_notes: String
+  resolved_at: DateTime
+  sale: Sales!
+  sale_id: Int!
+  status: String!
+  ticket_number: String!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type TicketAttachments {
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  file_path: String!
+  id: Int!
+  status: String!
+  ticket: Ticket!
+  ticket_id: Int!
+  type: String!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type TicketAttachmentsPagination {
+  data: [TicketAttachments!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type TicketLevels {
+  approval_notes: String
+  approval_required: Boolean!
+  approved_by: User
+  approved_by_id: Int
+  assigned_to: User!
+  assigned_to_id: Int!
+  createdAt: DateTime!
+  createdBy: User!
+  createdById: Int!
+  deletedAt: DateTime
+  deletedBy: User
+  deletedById: Int
+  diagnostic_notes: String
+  id: Int!
+  level: Int!
+  resolution_notes: String
+  status: Status!
+  ticket: Ticket!
+  ticket_id: Int!
+  updatedAt: DateTime!
+  updatedBy: User
+  updatedById: Int
+}
+
+type TicketLevelsPagination {
+  data: [TicketLevels!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+type TicketPagination {
+  data: [Ticket!]!
+  skip: Int!
+  take: Int!
+  total: Int!
+}
+
+enum TicketStatus {
+  CLOSED
+  IN_PROGRESS
+  OPEN
+  RESOLVED
+}
+
 input UpdateCityInput {
   name: String
   status: Status
@@ -475,6 +676,14 @@ input UpdateCompanyInput {
   updatedById: Int
   website: String
   zone_id: Int
+}
+
+input UpdateCustomerFeedbackTicketInput {
+  comments: String
+  createdById: Int
+  rating: Int
+  ticket_id: Int
+  updatedById: Int
 }
 
 input UpdateDealerSalesInput {
@@ -552,6 +761,44 @@ input UpdateSalesInput {
   updatedAt: DateTime
   updatedById: Int
   warranty_till: Int
+}
+
+input UpdateTicketAttachmentsInput {
+  createdById: Int
+  file_path: String
+  ticket_id: Int
+  type: String
+  updatedById: Int
+}
+
+input UpdateTicketInput {
+  createdById: Int
+  customer_id: Int
+  diagnostic_notes: String
+  issue_category: String
+  issue_description: String
+  preferred_contact_time: String
+  priority: Priority
+  product_id: Int
+  resolution_notes: String
+  resolved_at: DateTime
+  sale_id: Int
+  status: TicketStatus
+  ticket_number: String
+  updatedById: Int
+}
+
+input UpdateTicketLevelsInput {
+  approval_notes: String
+  approval_required: Boolean
+  approved_by_id: Int
+  assigned_to_id: Int
+  createdById: Int
+  diagnostic_notes: String
+  level: Int
+  resolution_notes: String
+  ticket_id: Int
+  updatedById: Int
 }
 
 input UpdateUserCompanyInput {
@@ -681,6 +928,18 @@ input WhereCompanySearchInput {
   zone_id: Int
 }
 
+input WhereCustomerFeedbackTicketSearchInput {
+  comments: String
+  createdAt: DateTime
+  createdById: Int
+  id: String
+  rating: Int
+  status: String
+  ticket_id: Int
+  updatedAt: DateTime
+  updatedById: Int
+}
+
 input WhereDealerSalesSearchInput {
   batch_number: String
   company_id: Int
@@ -770,6 +1029,55 @@ input WhereSalesSearchInput {
   updatedAt: DateTime
   updatedById: Int
   warranty_till: Int
+}
+
+input WhereTicketAttachmentsSearchInput {
+  createdAt: DateTime
+  createdById: Int
+  file_path: String
+  id: String
+  status: String
+  ticket_id: Int
+  type: String
+  updatedAt: DateTime
+  updatedById: Int
+}
+
+input WhereTicketLevelsSearchInput {
+  approval_notes: String
+  approval_required: Boolean
+  approved_by_id: Int
+  assigned_to_id: Int
+  createdAt: DateTime
+  createdById: Int
+  diagnostic_notes: String
+  id: String
+  level: Int
+  resolution_notes: String
+  status: String
+  ticket_id: Int
+  updatedAt: DateTime
+  updatedById: Int
+}
+
+input WhereTicketSearchInput {
+  createdAt: DateTime
+  createdById: Int
+  customer_id: Int
+  diagnostic_notes: String
+  id: String
+  issue_category: String
+  issue_description: String
+  preferred_contact_time: String
+  priority: Priority
+  product_id: Int
+  resolution_notes: String
+  sale: WhereSalesSearchInput
+  sale_id: Int
+  status: TicketStatus
+  ticket_number: String
+  updatedAt: DateTime
+  updatedById: Int
 }
 
 input WhereUserCompanySearchInput {
