@@ -3,6 +3,7 @@ import { CreateUserInput } from './create-user.input';
 import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 import {
   IsBoolean,
+  IsDate,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -110,14 +111,14 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   status: Status;
 
   @IsOptional()
-  @IsEnum(Status)
+  @IsDate()
   @Field(() => Date, {
     nullable: true,
   })
   updatedAt: Date;
 
   @IsOptional()
-  @IsEnum(Status)
+  @IsDate()
   @Field(() => Date, {
     nullable: true,
   })
